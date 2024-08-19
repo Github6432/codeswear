@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import { AiOutlineShoppingCart } from 'react-icons/ai'
 
 const Navbar = () => {
   return (
@@ -17,7 +18,9 @@ const Navbar = () => {
           <Link href={'/'} legacyBehavior><a><li></li></a></Link>
         </ul>
       </div>
-      <div className="cart absolute top-2 right-0 mx-5">Cart</div>
+      <div className="cart absolute top-4 right-0 mx-5">
+        <AiOutlineShoppingCart className='text-xl md:text-3xl' />
+      </div>
     </div>
   )
 }
