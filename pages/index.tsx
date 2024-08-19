@@ -1,4 +1,7 @@
 import Head from "next/head";
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -9,13 +12,13 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Navbar />
+      <div className="flex justify-center">
+        <Image src="/assets/slide7.png" alt="slide7.png" width={800} height={40} />
+      </div>
       <main >
-        <div >
-          <h1>CodesWear.com - wear the code</h1>
-          <div className="mx-6">This is Test 1</div>
-          <div className="mx-40 bg-green-800">This is Test 2</div>
-        </div>
       </main>
+      <Footer />
     </>
   );
 }
