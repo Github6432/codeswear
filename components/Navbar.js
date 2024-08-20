@@ -3,6 +3,7 @@ import Link from 'next/link'
 import React, { useRef } from 'react'
 import { AiFillMinusSquare, AiFillPlusSquare, AiFillShopping, AiOutlineShoppingCart } from 'react-icons/ai'
 import { IoMdCloseCircleOutline } from "react-icons/io";
+import { MdDelete } from 'react-icons/md';
 
 const Navbar = () => {
   const ref = useRef();
@@ -45,6 +46,7 @@ const Navbar = () => {
                 <AiFillMinusSquare className="text-pink-500 cursor-pointer" />
                 <span className="flex font-semibold mx-1 justify-center w-4">1</span>
                 <AiFillPlusSquare className="text-pink-500 cursor-pointer" />
+                <MdDelete className='text-pink-700 cursor-pointer mx-2' />
               </div>
             </div>
           </li>
@@ -55,6 +57,7 @@ const Navbar = () => {
                 <AiFillMinusSquare className="text-pink-500 cursor-pointer" />
                 <span className="flex font-semibold mx-1 justify-center w-4">1</span>
                 <AiFillPlusSquare className="text-pink-500 cursor-pointer" />
+                <MdDelete className='text-pink-700 cursor-pointer mx-2' />
               </div>
             </div>
           </li>
@@ -65,6 +68,7 @@ const Navbar = () => {
                 <AiFillMinusSquare className="text-pink-500 cursor-pointer" />
                 <span className="flex font-semibold mx-1 justify-center w-4">1</span>
                 <AiFillPlusSquare className="text-pink-500 cursor-pointer" />
+                <MdDelete className='text-pink-700 cursor-pointer mx-2' />
               </div>
             </div>
           </li>
@@ -75,6 +79,7 @@ const Navbar = () => {
                 <AiFillMinusSquare className="text-pink-500 cursor-pointer" />
                 <span className="flex font-semibold mx-1 justify-center w-4">1</span>
                 <AiFillPlusSquare className="text-pink-500 cursor-pointer" />
+                <MdDelete className='text-pink-700 cursor-pointer mx-2' />
               </div>
             </div>
           </li>
@@ -85,6 +90,7 @@ const Navbar = () => {
                 <AiFillMinusSquare className="text-pink-500 cursor-pointer" />
                 <span className="flex font-semibold mx-1 justify-center w-4">1</span>
                 <AiFillPlusSquare className="text-pink-500 cursor-pointer" />
+                <MdDelete className='text-pink-700 cursor-pointer mx-2' />
               </div>
             </div>
           </li>
