@@ -5,21 +5,22 @@ import { AiOutlineShoppingCart } from 'react-icons/ai'
 
 const Navbar = () => {
   return (
-    <div className='flex flex-col justify-center items-center md:justify-start md:flex-row'>
+    <div className='flex flex-col justify-center items-center md:justify-start md:flex-row shadow-xl my-1'>
       <div className="logo mx-5">
-        <Image src="/assets/nav.png" alt="" width={200} height={40} />
+        <Link href={'/'}>
+          <Image className='pb-1' src="/assets/nav.png" alt="" width={200} height={40} />
+        </Link>
       </div>
       <div className="nav">
-        <ul className='flex items-center space-x-2'>
-          <Link href={'/'} legacyBehavior><a><li>Tshirts</li></a></Link>
-          <Link href={'/'} legacyBehavior><a><li>Hoodies</li></a></Link>
-          <Link href={'/'} legacyBehavior><a><li>Stickers</li></a></Link>
-          <Link href={'/'} legacyBehavior><a><li>Mugs</li></a></Link>
-          <Link href={'/'} legacyBehavior><a><li></li></a></Link>
+        <ul className='flex items-center space-x-2 font-semibold'>
+          <Link href={'/tshirts'} legacyBehavior><a><li>Tshirts</li></a></Link>
+          <Link href={'/hoodies'} legacyBehavior><a><li>Hoodies</li></a></Link>
+          <Link href={'/stickers'} legacyBehavior><a><li>Stickers</li></a></Link>
+          <Link href={'/mugs'} legacyBehavior><a><li>Mugs</li></a></Link>
         </ul>
       </div>
-      <div className="cart absolute top-4 right-0 mx-5">
-        <AiOutlineShoppingCart className='text-xl md:text-3xl' />
+      <div className="cart absolute top-3 right-0 mx-5">
+        <AiOutlineShoppingCart className='text-xl md:text-2xl' />
       </div>
     </div>
   )
