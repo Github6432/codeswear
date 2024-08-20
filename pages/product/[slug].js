@@ -1,9 +1,27 @@
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
 
 const Slug = () => {
     const router = useRouter();
     const { slug } = router.query;
+    const [pin, setPin] = useState()
+    const [service, setService] = useState(null)
+
+    const checkServiceability = async () => {
+        let pins = await fetch(`http://localhost:3000/api/hello`)
+        let pinJson = await pins.json()
+
+        if (pinJson.includes(parseInt(pin))) {
+            setService(true);
+        }
+        else {
+            setService(false);
+        }
+    }
+    const onChangePin = (e) => {
+        setPin(e.target.value);
+    }
+
     return (
         <>
             <section className="text-gray-600 body-font overflow-hidden">
@@ -75,9 +93,13 @@ const Slug = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className='flex justify-center items-center mb-5'>
-                                <input type="text" className="p-1 border text-xs border-pink-500 rounded-md" placeholder="Enter Your Pin Code" />
-                                <button className='text-sm text-white bg-pink-500 border-0 w-24 h-6 mx-5 focus:outline-none hover:bg-pink-600 rounded'>Dilevry Status</button>
+                            <div className='flex justify-center items-center mb-2'>
+                                <input type="text" onChange={onChangePin} className="p-1 border text-xs border-pink-500 rounded-md" placeholder="Enter Your Pin Code" />
+                                <button onClick={checkServiceability} className='text-sm text-white bg-pink-500 border-0 w-24 h-6 mx-5 focus:outline-none hover:bg-pink-600 rounded'>Dilevry Status</button>
+                            </div>
+                            <div className="flex justify-center items-center mb-3">
+                                {(!service && service !== null) && <div className="text-sm text-red-700 mt-1">Sorry! We do not serve the area.</div>}
+                                {(service && service !== null) && <div className="text-sm text-green-700 mt-1">Yay! We serve the area.</div>}
                             </div>
                             <div className="flex">
                                 <span className="title-font font-medium text-lg text-gray-900">Price : ₹58.00</span>
