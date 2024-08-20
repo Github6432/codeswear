@@ -75,6 +75,10 @@ const Slug = () => {
                                     </div>
                                 </div>
                             </div>
+                            <div className='flex justify-center items-center mb-5'>
+                                <input type="text" className="p-1 border text-xs border-pink-500 rounded-md" placeholder="Enter Your Pin Code" />
+                                <button className='text-sm text-white bg-pink-500 border-0 w-24 h-6 mx-5 focus:outline-none hover:bg-pink-600 rounded'>Dilevry Status</button>
+                            </div>
                             <div className="flex">
                                 <span className="title-font font-medium text-lg text-gray-900">Price : ₹58.00</span>
                                 <button className="ml-auto text-sm text-white bg-pink-600 border-0 w-20 h-8 mx-5 focus:outline-none hover:bg-pink-800 rounded">Buy Now</button>
