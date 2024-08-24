@@ -5,7 +5,7 @@ import { AiFillMinusSquare, AiFillPlusSquare, AiFillShopping, AiOutlineShoppingC
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { MdDelete } from 'react-icons/md';
 
-const Navbar = () => {
+const Navbar = ({ cart, addToCart, removeFromCart, deleteCartItem, subTotal }) => {
   const ref = useRef();
   const toggleCart = () => {
     if (ref.current.classList.contains('translate-x-full')) {
@@ -39,68 +39,31 @@ const Navbar = () => {
         <IoMdCloseCircleOutline onClick={toggleCart} className='absolute cursor-pointer top-0 m-2 font-bold text-2xl text-pink-500' />
         <hr className='border-pink-800 border-2 my-2' />
         <ol className='list-decimal font-semibold mx-5'>
-          <li>
-            <div className="item flex my-5">
-              <div className='text-sm mx-1 w-56'>Tshirt - Wear the code</div>
-              <div className="w-1/3 flex font-semibold text-center content-between items-center text-lg">
-                <AiFillMinusSquare className="text-pink-500 cursor-pointer" />
-                <span className="flex font-semibold mx-1 justify-center w-4">1</span>
-                <AiFillPlusSquare className="text-pink-500 cursor-pointer" />
-                <MdDelete className='text-pink-700 cursor-pointer mx-2' />
+          {Object.keys(cart).length == 0 && <div className=' flex justify-center font-medium'>Your cart is Empty</div>}
+          {Object.keys(cart).map((k) => {
+            return <li key={k}>
+              <div className="item flex my-5">
+                <div className='text-sm mx-1 w-56'>{cart[k].name}</div>
+                <div className="w-1/3 flex font-semibold text-center content-between items-center text-lg">
+                  <AiFillMinusSquare onClick={() => { removeFromCart(k, 1, cart[k].name, cart[k].size, cart[k].variant) }} className="text-pink-500 cursor-pointer" />
+                  <span className="flex font-semibold mx-1 justify-center w-4">{cart[k].qty}</span>
+                  <AiFillPlusSquare onClick={() => { addToCart(k, 1, cart[k].name, cart[k].size, cart[k].variant) }} className="text-pink-500 cursor-pointer" />
+                  <MdDelete className='text-pink-700 cursor-pointer mx-2' onClick={() => { deleteCartItem(Object.keys(cart)[0]) }} />
+                </div>
               </div>
-            </div>
-          </li>
-          <li>
-            <div className="item flex my-5">
-              <div className='text-sm mx-1 w-56'>Tshirt - Wear the code</div>
-              <div className="w-1/3 flex font-semibold text-center content-between items-center text-lg">
-                <AiFillMinusSquare className="text-pink-500 cursor-pointer" />
-                <span className="flex font-semibold mx-1 justify-center w-4">1</span>
-                <AiFillPlusSquare className="text-pink-500 cursor-pointer" />
-                <MdDelete className='text-pink-700 cursor-pointer mx-2' />
-              </div>
-            </div>
-          </li>
-          <li>
-            <div className="item flex my-5">
-              <div className='text-sm mx-1 w-56'>Tshirt - Wear the code</div>
-              <div className="w-1/3 flex font-semibold text-center content-between items-center text-lg">
-                <AiFillMinusSquare className="text-pink-500 cursor-pointer" />
-                <span className="flex font-semibold mx-1 justify-center w-4">1</span>
-                <AiFillPlusSquare className="text-pink-500 cursor-pointer" />
-                <MdDelete className='text-pink-700 cursor-pointer mx-2' />
-              </div>
-            </div>
-          </li>
-          <li>
-            <div className="item flex my-5">
-              <div className='text-sm mx-1 w-56'>Tshirt - Wear the code</div>
-              <div className="w-1/3 flex font-semibold text-center content-between items-center text-lg">
-                <AiFillMinusSquare className="text-pink-500 cursor-pointer" />
-                <span className="flex font-semibold mx-1 justify-center w-4">1</span>
-                <AiFillPlusSquare className="text-pink-500 cursor-pointer" />
-                <MdDelete className='text-pink-700 cursor-pointer mx-2' />
-              </div>
-            </div>
-          </li>
-          <li>
-            <div className="item flex my-5">
-              <div className='text-sm mx-1 w-56'>Tshirt - Wear the code</div>
-              <div className="w-1/3 flex font-semibold text-center content-between items-center text-lg">
-                <AiFillMinusSquare className="text-pink-500 cursor-pointer" />
-                <span className="flex font-semibold mx-1 justify-center w-4">1</span>
-                <AiFillPlusSquare className="text-pink-500 cursor-pointer" />
-                <MdDelete className='text-pink-700 cursor-pointer mx-2' />
-              </div>
-            </div>
-          </li>
+            </li>
+          })}
         </ol>
-        <button
-          type="button"
-          className="text-white  bg-pink-500 hover:bg-pink-600 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm mx-14 mt-28 px-5 py-2 text-center inline-flex items-center  mr-2 mb-2">
-            <AiFillShopping className="text-lg mx-1" />
-          CHECKOUT
-        </button>
+        <div className='flex justify-center'>
+          <Link href={`/checkout`} legacyBehavior>
+            <button
+              type="button"
+              className="flex text-white  bg-pink-500 hover:bg-pink-600 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm  mt-4 px-5 py-2  mr-2 mb-2">
+              <AiFillShopping className="text-lg mx-1" />
+              CHECKOUT
+            </button>
+          </Link>
+        </div>
       </div>
     </div>
   )

@@ -12,7 +12,7 @@ const Mugs = () => {
         <div className="container px-5 py-8 mx-auto">
           <div className="grid md:grid-cols-4 gap-4 mx-20 md:mx-44">
             <div className="p-4 px-10 w-full shadow-lg shadow-gray-500 rounded-lg">
-              <Link href={`/product/wear-the-code`} legacyBehavior>
+              <Link href={`/product/mugs`} legacyBehavior>
                 <div className="block relative rounded overflow-hidden  cursor-pointer">
                   <img alt="ecommerce" className=" object-center" width={150} height={200} src="https://c.media-amazon.com/images/I/410epLkArAL._AC_UL320_.jpg" />
                 </div>
@@ -25,7 +25,7 @@ const Mugs = () => {
               </div>
             </div>
             <div className="p-4 px-10 w-full shadow-lg shadow-gray-500 rounded-lg">
-              <Link href={`/product/wear-the-code`} legacyBehavior>
+              <Link href={`/product/mug 2`} legacyBehavior>
                 <div className="block relative rounded overflow-hidden  cursor-pointer">
                   <img alt="ecommerce" className=" object-center" width={150} height={200} src="https://c.media-amazon.com/images/I/410epLkArAL._AC_UL320_.jpg" />
                 </div>
