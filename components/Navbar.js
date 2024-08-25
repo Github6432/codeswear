@@ -3,6 +3,7 @@ import Link from 'next/link'
 import React, { useRef } from 'react'
 import { AiFillMinusSquare, AiFillPlusSquare, AiFillShopping, AiOutlineShoppingCart } from 'react-icons/ai'
 import { IoMdCloseCircleOutline } from "react-icons/io";
+import { MdAccountCircle } from "react-icons/md"
 import { MdDelete } from 'react-icons/md';
 
 const Navbar = ({ cart, addToCart, removeFromCart, deleteCartItem, subTotal }) => {
@@ -31,8 +32,11 @@ const Navbar = ({ cart, addToCart, removeFromCart, deleteCartItem, subTotal }) =
           <Link href={'/mugs'} legacyBehavior><a><li>Mugs</li></a></Link>
         </ul>
       </div>
-      <div className="cart absolute top-3 right-0 mx-5">
-        <AiOutlineShoppingCart onClick={toggleCart} className='text-xl md:text-2xl' />
+      <div className="cart flex absolute top-3 right-0 mx-8 text-2xl text-pink-500  ">
+        <Link href={'/login'}><MdAccountCircle className="mx-2 hover:text-pink-800" /></Link>
+        <span className="relative inline-flex cursor-pointer " onClick={toggleCart}>
+          <AiOutlineShoppingCart onClick={toggleCart} className='text-xl md:text-2xl hover:text-pink-800' />
+        </span>
       </div>
       <div ref={ref} className=" h-screen sidebar absolute overflow-y-scroll p-3 h- top-10 right-0 w-2/3 md:w-3/12 bg-pink-100 md:transform transition-transform translate-x-full">
         <h1 className='text-center font-bold'> Shoping Cart </h1>
