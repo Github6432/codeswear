@@ -35,7 +35,7 @@ const Navbar = ({ cart, addToCart, removeFromCart, deleteCartItem, subTotal }) =
       <div className="cart flex absolute top-3 right-0 mx-8 text-2xl text-pink-500  ">
         <Link href={'/login'}><MdAccountCircle className="mx-2 hover:text-pink-800" /></Link>
         <span className="relative inline-flex cursor-pointer " onClick={toggleCart}>
-          <AiOutlineShoppingCart onClick={toggleCart} className='text-xl md:text-2xl hover:text-pink-800' />
+          <AiOutlineShoppingCart  className='text-xl md:text-2xl hover:text-pink-800' />
         </span>
       </div>
       <div ref={ref} className=" h-screen sidebar absolute overflow-y-scroll p-3 h- top-10 right-0 w-2/3 md:w-3/12 bg-pink-100 md:transform transition-transform translate-x-full">
