@@ -24,7 +24,6 @@ export default function App({ Component, pageProps }) {
 
   //SAVE CART & SUB TOTAL
   const saveCart = (newCart) => {
-    console.log(newCart)
     localStorage.setItem("cart", JSON.stringify(newCart));
     let subT = 0;
     let keys = Object.keys(newCart);
