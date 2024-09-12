@@ -17,7 +17,7 @@ const Tshirts = ({ products }) => {
             {
               Object.keys(products).map((item) => {
                 return <div key={products[item]._id} className="p-4 px-10 w-full shadow-lg shadow-gray-500 rounded-lg">
-                  <div className="cursor-pointer h-2/3 shadow-lg flex justify-center items-center">
+                  <div className="cursor-pointer md:h-2/3 h-3/5 shadow-lg flex justify-center items-center">
                     <Link href={`/product/${products[item].slug}`} legacyBehavior>
                       <img alt={`${products[item].title} Picture`} className='mx-auto' width={170} height={200} src={products[item].img} />
                     </Link>
@@ -33,7 +33,7 @@ const Tshirts = ({ products }) => {
                       {products[item].size.includes("XL") && (<span className="border border-gray-300 px-1">XL</span>)}
                       {products[item].size.includes("XXL") && (<span className="border border-gray-300 px-1">XXL</span>)}
                     </p>
-                    <p className="mt-2 mb-8 text-gray-600 text-sm space-x-1">
+                    <p className="mt-3 mb-8 text-gray-600 text-sm space-x-1">
                       {products[item].color.includes("red") && (<button className="border-2 border-gray-300 rounded-full bg-none bg-red-700 hover:bg-red-600 w-6 h-6 focus:outline-none"></button>)}
                       {products[item].color.includes("blue") && (<button className="border-2 border-gray-300 rounded-full bg-none bg-blue-700 hover:bg-blue-600 w-6 h-6 focus:outline-none"></button>)}
                       {products[item].color.includes("black") && (<button className="border-2 border-gray-300 rounded-full bg-none bg-black hover:bg-black w-6 h-6 focus:outline-none"></button>)}
