@@ -22,8 +22,10 @@ const Tshirts = ({ products }) => {
                     </Link>
                   </div>
                   <div className="mt-4">
-                    <h3 className="text-gray-500 text-xs tracking-widest title-font text-center mb-1">{products[item].category}</h3>
-                    <h2 className="text-gray-900 title-font text-lg text-center font-medium">{products[item].title}</h2>
+                      <h3 className="text-gray-500 text-xs tracking-widest title-font text-center mb-1">{products[item].category}</h3>
+                    <Link href={`/product/${products[item].slug}`} legacyBehavior>
+                      <h2 className="text-gray-900 title-font text-lg text-center cursor-pointer font-medium">{products[item].title}</h2>
+                    </Link>
                     <p className="mt-1 text-center">₹{products[item].price}</p>
                     <p className="mt-1 text-gray-600 text-sm space-x-1">
                       {products[item].size.includes("S") && (<span className="border border-gray-300 px-1">S</span>)}
