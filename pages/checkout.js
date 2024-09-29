@@ -2,6 +2,7 @@ import React from 'react'
 import Link from "next/link";
 
 import { AiFillPlusSquare, AiFillMinusSquare, AiFillShopping } from "react-icons/ai";
+import { MdDelete } from 'react-icons/md';
 
 const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
   return (<>
@@ -58,21 +59,18 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
             )}
             {Object.keys(cart).map((k) => {
               return (
-                <li key={k} className="hover:text-black">
-                  <div className="item flex my-5">
-                    <div className=" font-semibold text-sm">
-                      {cart[k].name}
-                    </div>
-                    <div className="w-1/3 flex font-semibold text-center justify-center items-center text-lg">
-                      <AiFillMinusSquare
-                        onClick={() => { removeFromCart(k, 1, cart[k].price, cart[k].name, cart[k].size, cart[k].variant); }}
-                        className="text-pink-500"
-                      />
-                      <span className="mx-2">{cart[k].qty}</span>
-                      <AiFillPlusSquare
-                        onClick={() => { addToCart(k, 1, cart[k].price, cart[k].name, cart[k].size, cart[k].variant); }}
-                        className="text-pink-500"
-                      />
+                <li key={k}>
+                  <div className="item flex text-center items-center mt-2">
+                    <div className='text-sm font-semibold mx-1 w-56'>{cart[k].name}</div>
+                  <img alt="ecommerce" className="w-12 md:w-10 m-2 object-cover object-center rounded" src={cart[k].image} />
+                    <div className='text-sm mx-1 w-56'>{cart[k].size}</div>
+                    <div className='text-sm mx-1 w-56'>{cart[k].variant}</div>
+                    <div className='text-sm mx-1 w-56'>₹ {cart[k].price * cart[k].qty}</div>
+                    <div className="w-1/3 flex font-semibold text-center content-between items-center text-lg">
+                      <AiFillMinusSquare onClick={() => { removeFromCart(k, 1, cart[k].name, cart[k].size, cart[k].variant) }} className="text-pink-500 cursor-pointer" />
+                      <span className="flex font-semibold mx-1 justify-center w-4">{cart[k].qty}</span>
+                      <AiFillPlusSquare onClick={() => { addToCart(k, 1, cart[k].name, cart[k].size, cart[k].variant) }} className="text-pink-500 cursor-pointer" />
+                      <MdDelete className='text-pink-700 cursor-pointer mx-2' onClick={() => { deleteCartItem(Object.keys(cart)[0]) }} />
                     </div>
                   </div>
                 </li>

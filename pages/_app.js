@@ -2,8 +2,10 @@ import "@/styles/globals.css";
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 export default function App({ Component, pageProps }) {
+  const router = useRouter();
   //STATE
   const [cart, setCart] = useState({});
   const [subTotal, setSubTotal] = useState(0);
@@ -33,12 +35,13 @@ export default function App({ Component, pageProps }) {
     setSubTotal(subT);
   };
   //ADD TO CART
-  const addToCart = (itemCode, qty, price, name, size, variant) => {
+  const addToCart = (itemCode, qty, price, name, size, variant, image) => {
+    console.log('ccc1', cart)
     let newCart = { ...cart };
     if (itemCode in newCart) {
       newCart[itemCode].qty += qty;
     } else {
-      newCart[itemCode] = { qty, price, name, size, variant };
+      newCart[itemCode] = { qty, price, name, size, variant, image };
     }
     setCart(newCart);
     saveCart(newCart);
@@ -66,11 +69,15 @@ export default function App({ Component, pageProps }) {
     setCart(newCart);
     saveCart(newCart);
   }
+  const buyNow = (itemCode, qty, price, name, size, variant, image) => {
+    addToCart(itemCode, qty, price, name, size, variant, image);
+    router.push('/checkout');
+  }
 
   return (
     <>
       <Navbar cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />
-      <Component {...pageProps} cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />
+      <Component {...pageProps} cart={cart} buyNow={buyNow} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />
       <Footer />
     </>
   );

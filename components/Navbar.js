@@ -46,7 +46,7 @@ const Navbar = ({ cart, addToCart, removeFromCart, deleteCartItem, subTotal }) =
           {Object.keys(cart).length == 0 && <div className=' flex justify-center font-medium'>Your cart is Empty</div>}
           {Object.keys(cart).map((k) => {
             return <li key={k}>
-              <div className="item flex my-5">
+              <div className="item flex">
                 <div className='text-sm mx-1 w-56'>{cart[k].name}</div>
                 <div className="w-1/3 flex font-semibold text-center content-between items-center text-lg">
                   <AiFillMinusSquare onClick={() => { removeFromCart(k, 1, cart[k].name, cart[k].size, cart[k].variant) }} className="text-pink-500 cursor-pointer" />
@@ -55,10 +55,19 @@ const Navbar = ({ cart, addToCart, removeFromCart, deleteCartItem, subTotal }) =
                   <MdDelete className='text-pink-700 cursor-pointer mx-2' onClick={() => { deleteCartItem(Object.keys(cart)[0]) }} />
                 </div>
               </div>
+              <div>
+                <div className='item flex space-x-5'>
+                  <img alt="ecommerce" className="w-1/6 md:w-1/8 m-2 object-cover object-center rounded" src={cart[k].image} />
+                  <p className='mt-4 font-light'>{cart[k].size}</p>
+                  <p className='mt-4 font-light'>{cart[k].variant}</p>
+                  <p className='mt-4 font-light'>₹ {cart[k].price * cart[k].qty}</p>
+                </div>
+              </div>
             </li>
           })}
         </ol>
-        <div className='flex justify-center'>
+        <div className='item flex space-x-5 mb-14'>
+          <div className='mt-5  font-extrabold'>Total : {subTotal}</div>
           <Link href={`/checkout`} legacyBehavior>
             <button
               type="button"

@@ -3,7 +3,9 @@ import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import Product from "@/models/Product";
 
-const Slug = ({ addToCart, variants, product }) => {
+const Slug = ({ buyNow, addToCart, variants, product }) => {
+    // console.log(product)
+    // console.log(variants)
     const router = useRouter();
     const { slug } = router.query;
     const [pin, setPin] = useState();
@@ -131,8 +133,8 @@ const Slug = ({ addToCart, variants, product }) => {
                             </div>
                             <div className="flex">
                                 <span className="title-font font-medium text-lg text-gray-900">Price : ₹{product.price}</span>
-                                <button className="ml-auto text-sm text-white bg-pink-600 border-0 w-20 h-8 mx-5 focus:outline-none hover:bg-pink-800 rounded">Buy Now</button>
-                                <button onClick={() => { addToCart(slug, 1, 499, 'JMT Product: Tshirt', 'XL', 'Red') }} className="ml-auto text-sm text-white bg-pink-600 border-0 w-24 h-8 mx-5 focus:outline-none hover:bg-pink-800 rounded">Add to Cart</button>
+                                <button onClick={() => {buyNow(slug, 1, product.price, product.title, product.size, product.color, product.img)}} className="ml-auto text-sm text-white bg-pink-600 border-0 w-20 h-8 mx-5 focus:outline-none hover:bg-pink-800 rounded">Buy Now</button>
+                                <button onClick={() => { addToCart(slug, 1, product.price, product.title, product.size, product.color, product.img) }} className="ml-auto text-sm text-white bg-pink-600 border-0 w-24 h-8 mx-5 focus:outline-none hover:bg-pink-800 rounded">Add to Cart</button>
 
                             </div>
                         </div>
