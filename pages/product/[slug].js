@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import Product from "@/models/Product";
+import { Bounce, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Slug = ({ buyNow, addToCart, variants, product }) => {
     // console.log(product)
@@ -19,9 +21,31 @@ const Slug = ({ buyNow, addToCart, variants, product }) => {
 
         if (pinJson.includes(parseInt(pin))) {
             setService(true);
+            toast.success('Yay! We serve the area.', {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
         }
         else {
             setService(false);
+            toast.error('Sorry, Pin Code not Serviceable!', {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
         }
     }
     const onChangePin = (e) => {
@@ -36,9 +60,21 @@ const Slug = ({ buyNow, addToCart, variants, product }) => {
     return (
         <>
             <section className="text-gray-600 body-font overflow-hidden">
+                <ToastContainer
+                    position="top-center"
+                    autoClose={1500}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
                 <div className="container px-5 py-10 mx-auto">
                     <div className="lg:w-4/5 mx-auto flex flex-wrap">
-                        <img alt="ecommerce" className="w-2/3 md:w-1/4 mx-auto object-cover object-center rounded" src={product.img}/>
+                        <img alt="ecommerce" className="w-2/3 md:w-1/4 mx-auto object-cover object-center rounded" src={product.img} />
                         <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
                             <h2 className="text-sm title-font text-gray-500 tracking-widest">JMT BRAND</h2>
                             <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">{product.title}({product.size}/{product.color})</h1>
@@ -133,7 +169,7 @@ const Slug = ({ buyNow, addToCart, variants, product }) => {
                             </div>
                             <div className="flex">
                                 <span className="title-font font-medium text-lg text-gray-900">Price : ₹{product.price}</span>
-                                <button onClick={() => {buyNow(slug, 1, product.price, product.title, product.size, product.color, product.img)}} className="ml-auto text-sm text-white bg-pink-600 border-0 w-20 h-8 mx-5 focus:outline-none hover:bg-pink-800 rounded">Buy Now</button>
+                                <button onClick={() => { buyNow(slug, 1, product.price, product.title, product.size, product.color, product.img) }} className="ml-auto text-sm text-white bg-pink-600 border-0 w-20 h-8 mx-5 focus:outline-none hover:bg-pink-800 rounded">Buy Now</button>
                                 <button onClick={() => { addToCart(slug, 1, product.price, product.title, product.size, product.color, product.img) }} className="ml-auto text-sm text-white bg-pink-600 border-0 w-24 h-8 mx-5 focus:outline-none hover:bg-pink-800 rounded">Add to Cart</button>
 
                             </div>
