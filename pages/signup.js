@@ -65,7 +65,6 @@ const Signup = () => {
         transition: Bounce,
       });
     }
-
     setName('');
     setEmail('');
     setPassword('');

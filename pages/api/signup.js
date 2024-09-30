@@ -17,7 +17,6 @@ const handler = async (req, res) => {
             res.status(400).json({ massage: 'Sign Up Failed, Please try again!', success: false, err });
         }
     } else {
-        console.error("Error creating user:", err);
         res.status(500).json({ message: 'Internal Server Error. Please try again later.', success: false });
     }
 };

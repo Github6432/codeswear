@@ -2,21 +2,17 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Company from '../public/assets/nav.png'
 import Image from "next/image";
-// import { ToastContainer, toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
+import { Bounce, toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const router = useRouter()
-  const [name, setName] = useState()
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
 
   const handleChange = (e) => {
-    if (e.target.name == 'name') {
-      setName(e.target.value)
-    }
-    else if (e.target.name == 'email') {
+    if (e.target.name == 'email') {
       setEmail(e.target.value)
     }
     else if (e.target.name == 'password') {
@@ -26,7 +22,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const data = { name, email, password }
+    const data = { email, password }
 
     let res = await fetch(`http://localhost:3000/api/login`, {
       method: "POST", // or 'PUT'
@@ -36,55 +32,55 @@ const Login = () => {
       body: JSON.stringify(data),
     })
     let response = await res.json()
-    console.log(response)
-
-    setName('')
     setEmail('')
     setPassword('')
     if (response.success) {
-      localStorage.setItem('token', response.token)
-      toast.success('Successfully Login!', {
+      // localStorage.setItem('token', response.token)
+      toast.success(response.message, {
         position: "top-center",
-        autoClose: 1500,
-        hideProgressBar: true,
+        autoClose: 700,
+        hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
         theme: "light",
+        transition: Bounce,
       });
-
-      router.push('http://localhost:3000/')
-
+      setTimeout(() => {
+        router.push('http://localhost:3000/')
+      }, 800);
     } else {
-      toast.error(response.error, {
+      toast.error(response.message, {
         position: "top-center",
         autoClose: 1500,
-        hideProgressBar: true,
+        hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
         theme: "light",
+        transition: Bounce,
       });
     }
   };
 
   return (
     <div>
-      {/* <ToastContainer
-            position="top-center"
-            autoClose={1500}
-            limit={5}
-            hideProgressBar
-            newestOnTop
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="colors"
-          /> */}
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        limit={5}
+        hideProgressBar
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colors"
+        transition={Bounce}
+      />
       <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div>
