@@ -4,8 +4,11 @@ import Company from "../public/assets/nav.png";
 import Image from "next/image";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/router";
+
 
 const Signup = () => {
+  const router = useRouter()
   const [name, setName] = useState()
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
@@ -21,7 +24,7 @@ const Signup = () => {
     else if (e.target.name == 'password') {
       setPassword(e.target.value)
     }
-    else if (e.target.name == 're-type-password'){
+    else if (e.target.name == 're-type-password') {
       setRepassword(e.target.value)
     }
   }
@@ -51,6 +54,9 @@ const Signup = () => {
         theme: "light",
         transition: Bounce,
       });
+      setTimeout(() => {
+        router.push('http://localhost:3000/login')
+      }, 2100);
     } else {
       console.log('2', success)
       toast.error(massage, {

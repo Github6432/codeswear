@@ -50,6 +50,7 @@ const Login = () => {
       setTimeout(() => {
         router.push('http://localhost:3000/')
       }, 800);
+      console.log(response)
     } else {
       toast.error(response.message, {
         position: "top-center",
