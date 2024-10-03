@@ -6,7 +6,6 @@ const handler = async (req, res) => {
     if (req.method === 'POST') {
         const { name, email, password, repassword } = req.body
         try {
-            console.log(req.body);
             if (password === repassword) {
                 const user = new User({ name, email, password: CryptoJS.AES.encrypt(req.body.password, 'jmt8077').toString() });
                 await user.save();
