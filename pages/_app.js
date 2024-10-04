@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
+import LoadingBar from 'react-top-loading-bar'
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { setuid } from "process";
@@ -11,10 +12,17 @@ export default function App({ Component, pageProps }) {
   const [key, setKey] = useState();
   const [cart, setCart] = useState({});
   const [subTotal, setSubTotal] = useState(0);
+  const [progress, setProgress] = useState(0)
   const [user, setUser] = useState({ value: null });
 
   //USEFFECT GET ITEM LOCAL STORAGE
   useEffect(() => {
+    router.events.on('routeChangeStart', ()=>{
+      setProgress(50);
+    })
+    router.events.on('routeChangeComplete', ()=>{
+      setProgress(100);
+    })
     try {
       if (localStorage.getItem("cart")) {
         setCart(JSON.parse(localStorage.getItem("cart")));
@@ -89,6 +97,7 @@ export default function App({ Component, pageProps }) {
 
   return (
     <>
+      <LoadingBar color='#ff2d55' progress={progress} onLoaderFinished={() => setProgress(0)} />
       <Navbar user={user} key={key} logout={logout} cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />
       <Component {...pageProps} cart={cart} buyNow={buyNow} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />
       <Footer />

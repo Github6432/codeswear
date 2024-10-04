@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Company from "../public/assets/nav.png";
 import Image from "next/image";
@@ -13,6 +13,12 @@ const Signup = () => {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
   const [repassword, setRepassword] = useState()
+
+  useEffect(() => {
+    if(localStorage.getItem("token")){
+      router.push('/')
+    }
+  }, [])
 
   const handleChange = (e) => {
     if (e.target.name == 'name') {
@@ -40,9 +46,7 @@ const Signup = () => {
     });
     let response = await res.json();
     const { massage, success, err } = response;
-    console.log('0', success, 'true')
-    if (success === true) {
-      console.log('1', success)
+    if (success) {
       toast.success(massage, {
         position: "top-center",
         autoClose: 2000,
@@ -58,7 +62,6 @@ const Signup = () => {
         router.push('http://localhost:3000/login')
       }, 2100);
     } else {
-      console.log('2', success)
       toast.error(massage, {
         position: "top-center",
         autoClose: 2000,

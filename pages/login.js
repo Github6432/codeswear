@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Company from '../public/assets/nav.png'
 import Image from "next/image";
@@ -10,6 +10,13 @@ const Login = () => {
   const router = useRouter()
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
+
+  useEffect(() => {
+    if(localStorage.getItem("token")){
+      router.push('/')
+    }
+  }, [])
+  
 
   const handleChange = (e) => {
     if (e.target.name == 'email') {
