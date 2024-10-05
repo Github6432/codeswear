@@ -45,7 +45,7 @@ const Navbar = ({ user, cart, addToCart, removeFromCart, deleteCartItem, subTota
           {dropdown && <div onMouseOver={() => { setDropdown(true) }} onMouseLeave={() => { setDropdown(false) }} className="absolute right-2 top-6 px-5 py-1 w-32 text-base rounded-md text-pink-900 bg-pink-200 ">
             <ul>
               <Link href={'/myaccount'} legacyBehavior><a><li className='py-1 hover:text-red-500 hover:font-bold'>My Acount</li></a></Link>
-              <Link href={'/order'} legacyBehavior><a><li className='py-1 hover:text-red-500 hover:font-bold'>Order</li></a></Link>
+              <Link href={'/orders'} legacyBehavior><a><li className='py-1 hover:text-red-500 hover:font-bold'>Orders</li></a></Link>
               <a onClick={logout}><li className='py-1 hover:text-red-500 hover:font-bold cursor-pointer'>Logout</li></a>
       </ul>
     </div>}
