@@ -100,7 +100,7 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <LoadingBar color='#ff2d55' progress={progress} onLoaderFinished={() => setProgress(0)} />
-      <Navbar user={user} key={key} logout={logout} cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />
+      { key && <Navbar user={user} key={key} logout={logout} cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />}
       <Component {...pageProps} cart={cart} buyNow={buyNow} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />
       <Footer />
     </>

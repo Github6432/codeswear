@@ -9,10 +9,11 @@ import { useRouter } from "next/router";
 
 const Signup = () => {
   const router = useRouter()
-  const [name, setName] = useState()
-  const [email, setEmail] = useState()
-  const [password, setPassword] = useState()
-  const [repassword, setRepassword] = useState()
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [repassword, setRepassword] = useState('')
+  console.log(process.env.NEXT_PUBLIC_HOST)
 
   useEffect(() => {
     if(localStorage.getItem("token")){
@@ -39,7 +40,7 @@ const Signup = () => {
     e.preventDefault()
     const data = { name, email, password, repassword }
 
-    let res = await fetch(`http://localhost:3000/api/signup`, {
+    let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/signup`, {
       method: "POST", // or 'PUT'
       headers: { "Content-Type": "application/json", },
       body: JSON.stringify(data),
@@ -59,7 +60,7 @@ const Signup = () => {
         transition: Bounce,
       });
       setTimeout(() => {
-        router.push('http://localhost:3000/login')
+        router.push(`${process.env.NEXT_PUBLIC_HOST}/login`)
       }, 2100);
     } else {
       toast.error(massage, {

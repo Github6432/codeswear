@@ -9,9 +9,9 @@ import 'react-toastify/dist/ReactToastify.css';
 const Forgot = () => {
     const router = useRouter();
 
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
-    const [repassword, setRepassword] = useState();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [repassword, setRepassword] = useState('');
 
     useEffect(() => {
         if (localStorage.getItem("token")) {
@@ -35,7 +35,7 @@ const Forgot = () => {
         e.preventDefault()
         const data = { email, password, repassword }
 
-        let res = await fetch(`http://localhost:3000/api/forgot`, {
+        let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/forgot`, {
             method: "POST", // or 'PUT'
             headers: { "Content-Type": "application/json", },
             body: JSON.stringify(data),
@@ -55,7 +55,7 @@ const Forgot = () => {
                 transition: Bounce,
             });
             setTimeout(() => {
-                router.push('http://localhost:3000/login')
+                router.push(`${process.env.NEXT_PUBLIC_HOST}/login`)
             }, 2100);
         } else {
             toast.error(message, {

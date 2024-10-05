@@ -8,15 +8,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const router = useRouter()
-  const [email, setEmail] = useState()
-  const [password, setPassword] = useState()
-
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   useEffect(() => {
-    if(localStorage.getItem("token")){
+    if (localStorage.getItem("token")) {
       router.push('/')
     }
   }, [])
-  
+
 
   const handleChange = (e) => {
     if (e.target.name == 'email') {
@@ -31,7 +30,7 @@ const Login = () => {
     e.preventDefault()
     const data = { email, password }
 
-    let res = await fetch(`http://localhost:3000/api/login`, {
+    let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/login`, {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json",
@@ -55,9 +54,8 @@ const Login = () => {
         transition: Bounce,
       });
       setTimeout(() => {
-        router.push('http://localhost:3000/')
+        router.push(`${process.env.NEXT_PUBLIC_HOST}`)
       }, 800);
-      console.log(response)
     } else {
       toast.error(response.message, {
         position: "top-center",
