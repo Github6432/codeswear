@@ -57,9 +57,9 @@ export async function getServerSideProps(context) {
     if (!mongoose.connections[0].readystate) {
         await mongoose.connect(process.env.MONGO_URI);
     }
-    let orders = await Order.find({  })
+    let orders = await Order.find({});
     return {
-        props: { orders: orders }, // will be passed to the page component as props
+        props: { orders: JSON.parse(JSON.stringify(orders) )}, // will be passed to the page component as props
     };
 
 }

@@ -1,10 +1,87 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from "next/link";
+const jwt = require('jsonwebtoken');
 
 import { AiFillPlusSquare, AiFillMinusSquare, AiFillShopping } from "react-icons/ai";
 import { MdDelete } from 'react-icons/md';
+import { useRouter } from 'next/router';
+import { loadStripe } from '@stripe/stripe-js';
 
 const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
+  const router = useRouter();
+  const { session_id } = router.query;
+
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+
+  const handleChange = (e) => {
+    if (e.target.name == 'phone') {
+      setPhone(e.target.value)
+    }
+    else if (e.target.name == 'email') {
+      setEmail(e.target.value)
+    }
+    // else if (e.target.name == 'password') {
+    //   setPassword(e.target.value)
+    // }
+    // else if (e.target.name == 're-type-password') {
+    //   setRepassword(e.target.value)
+    // }
+  }
+
+  const handlePayment = async () => {
+    console.log(cart, email, phone)
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/stripe-server-instance`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ cart, email, phone }),
+      });
+      const data = await res.json();
+      console.log('Payment data', data?.session);
+      // Redirect to the Stripe Checkout page
+      if (data?.session?.id) {
+        const response = await fetch('/api/save-order', {
+          method: 'POST', headers: { 'Content-Type': 'application/json', },
+          body: JSON.stringify({ session_id: data?.session?.id }),
+        });
+        const jsonData = await response.json();
+        console.log('paydata', jsonData)
+        const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+        await stripe.redirectToCheckout({ sessionId: data.session.id });
+      } else {
+        console.error('Error saving the order:', error);
+      }
+    } catch (error) {
+      console.log('ERROR: =>', error)
+    }
+  }
+
+  // useEffect(() => {
+  //   console.log('test ok')
+  //   const saveOrder = async () => {
+  //     if (session_id) {
+  // try {
+  //   const response = await fetch('/api/save-order', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ session_id }),
+  //   });
+  //   const data = await response.json();
+  //   console.log('paydata', data)
+  // } catch (error) {
+  //   console.error('Error saving the order:', error);
+  // }
+  // }
+  //   };
+  //   saveOrder()
+  // }, [session_id]);
+
+
   return (<>
     <div>
       <h2 className='text-center text-xl font-semibold text-pink-500 my-4'>Check Out</h2>
@@ -13,32 +90,32 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
         <h5 className='font-bold my-4'>1. Delivery Details</h5>
         <div className="grid gap-6 mb-6 md:grid-cols-2 ">
           <div>
-            <label forhtml="first_name" className="block mb-2 text-sm  text-gray-900 ">First name</label>
+            <label htmlFor="first_name" className="block mb-2 text-sm  text-gray-900 ">First name</label>
             <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="John" required />
           </div>
           <div>
-            <label forhtml="last_name" className="block mb-2 text-sm  text-gray-900 ">Last name</label>
+            <label htmlFor="last_name" className="block mb-2 text-sm  text-gray-900 ">Last name</label>
             <input type="text" id="last_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="Doe" />
           </div>
           <div>
-            <label forhtml="email" className="block mb-2 text-sm  text-gray-900 ">Email</label>
-            <input type="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="email@gmail.com" required />
+            <label htmlFor="email" className="block mb-2 text-sm  text-gray-900 ">Email</label>
+            <input type="email" name='email' id="email" onChange={handleChange} value={email} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="email@gmail.com" required />
           </div>
           <div>
-            <label forhtml="phone" className="block mb-2 text-sm  text-gray-900 ">Phone number</label>
-            <input type="tel" id="phone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required />
+            <label htmlFor="phone" className="block mb-2 text-sm  text-gray-900 ">Phone number</label>
+            <input type="tel" name='phone' id="phone" onChange={handleChange} value={phone} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required />
           </div>
           <div>
-            <label forhtml="city" className="block mb-2 text-sm  text-gray-900 ">City</label>
+            <label htmlFor="city" className="block mb-2 text-sm  text-gray-900 ">City</label>
             <input type="url" id="city" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="City" required />
           </div>
           <div>
-            <label forhtml="state" className="block mb-2 text-sm  text-gray-900 ">State</label>
+            <label htmlFor="state" className="block mb-2 text-sm  text-gray-900 ">State</label>
             <input type="number" id="state" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="State" required />
           </div>
         </div>
         <div className="mb-6">
-          <label forhtml="address" className="block mb-2 text-sm  text-gray-900 ">Address</label>
+          <label htmlFor="address" className="block mb-2 text-sm  text-gray-900 ">Address</label>
           <textarea type="text" id="address" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows='2' placeholder="Enter your address" required />
         </div>
 
@@ -62,7 +139,7 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
                 <li key={k}>
                   <div className="item flex text-center items-center mt-2">
                     <div className='text-sm font-semibold mx-1 w-56'>{cart[k].name}</div>
-                  <img alt="ecommerce" className="w-12 md:w-10 m-2 object-cover object-center rounded" src={cart[k].image} />
+                    <img alt="ecommerce" className="w-12 md:w-10 m-2 object-cover object-center rounded" src={cart[k].image} />
                     <div className='text-sm mx-1 w-56'>{cart[k].size}</div>
                     <div className='text-sm mx-1 w-56'>{cart[k].variant}</div>
                     <div className='text-sm mx-1 w-56'>₹ {cart[k].price * cart[k].qty}</div>
@@ -82,13 +159,13 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
             <div className="flex items-center h-5">
               <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800" required />
             </div>
-            <label forhtml="remember" className="ml-2 text-sm  text-gray-900 dark:text-gray-500">I agree with the <a href="#" className="text-blue-600 hover:underline dark:text-blue-500">terms and conditions</a>.</label>
+            <label htmlFor="remember" className="ml-2 text-sm  text-gray-900 dark:text-gray-500">I agree with the <a href="#" className="text-blue-600 hover:underline dark:text-blue-500">terms and conditions</a>.</label>
           </div>
           <div className="flex mt-2">
             <span className='font-bold py-2 mr-20'>SubTotal: ₹{subTotal}</span>
             <Link href={'/checkout'}>
               <button
-                // onClick={() => clearCart}
+                onClick={handlePayment}
                 type="button"
                 className="text-white bg-pink-500 hover:bg-pink-600 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center  mr-2 mb-2">
                 <AiFillShopping className="text-lg mx-1" />

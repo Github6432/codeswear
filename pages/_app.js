@@ -4,7 +4,6 @@ import Navbar from '../components/Navbar';
 import LoadingBar from 'react-top-loading-bar'
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { setuid } from "process";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
