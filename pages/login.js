@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const router = useRouter()
-  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -18,8 +18,8 @@ const Login = () => {
 
 
   const handleChange = (e) => {
-    if (e.target.name == 'email') {
-      setEmail(e.target.value)
+    if (e.target.name == 'phone') {
+      setPhone(e.target.value)
     }
     else if (e.target.name == 'password') {
       setPassword(e.target.value)
@@ -28,7 +28,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const data = { email, password }
+    const data = { phone, password }
 
     let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/login`, {
       method: "POST", // or 'PUT'
@@ -38,7 +38,7 @@ const Login = () => {
       body: JSON.stringify(data),
     })
     let response = await res.json()
-    setEmail('')
+    setPhone('')
     setPassword('')
     if (response.success) {
       localStorage.setItem('token', response.token)
@@ -102,17 +102,17 @@ const Login = () => {
             <div className="space-y-px rounded-md shadow-sm">
 
               <div>
-                <label htmlFor="email" className="sr-only">Email address</label>
+                <label htmlFor="phone" className="sr-only">Email address</label>
                 <input
                   onChange={handleChange}
-                  value={email}
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
+                  value={phone}
+                  id="phone"
+                  name="phone"
+                  type="phone"
+                  autoComplete="phone"
                   required
                   className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 mb-1 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-pink-500 focus:outline-none focus:ring-pink-500 sm:text-sm"
-                  placeholder="Email address"
+                  placeholder="Phone"
                 />
               </div>
               <div>

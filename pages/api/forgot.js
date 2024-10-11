@@ -5,12 +5,12 @@ const jwt = require('jsonwebtoken');
 
 const handler = async (req, res) => {
     if (req.method === 'POST') {
-        const { email, password, repassword } = req.body;
+        const { phone, password, repassword } = req.body;
         
         try {
-            const user = await User.findOne({ email });
+            const user = await User.findOne({ phone });
 
-            // Check if email matches
+            // Check if phone matches
             if (!user) {
                 return res.status(400).json({ message: 'Invalid Credentials, Please Enter Valid Credentials', success: false });
             }
@@ -21,7 +21,7 @@ const handler = async (req, res) => {
             }
 
             // Encrypt new password and save
-            user.password = CryptoJS.AES.encrypt(password, 'jmt8077').toString();
+            user.password = CryptoJS.AES.encrypt(password, process.env.AES_SECRET_KEY).toString();
             await user.save();
 
             return res.status(200).json({ message: 'Your Password Changed Successfully!', success: true });

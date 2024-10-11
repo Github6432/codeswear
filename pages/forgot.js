@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const Forgot = () => {
     const router = useRouter();
 
-    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [repassword, setRepassword] = useState('');
 
@@ -20,8 +20,8 @@ const Forgot = () => {
     }, [])
 
     const handleChange = (e) => {
-        if (e.target.name == 'email') {
-            setEmail(e.target.value)
+        if (e.target.name == 'phone') {
+            setPhone(e.target.value)
         }
         else if (e.target.name == 'password') {
             setPassword(e.target.value)
@@ -33,7 +33,7 @@ const Forgot = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const data = { email, password, repassword }
+        const data = { phone, password, repassword }
 
         let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/forgot`, {
             method: "POST", // or 'PUT'
@@ -100,17 +100,17 @@ const Forgot = () => {
                         <input type="hidden" name="remember" value="true" />
                         <div className="space-y-4 rounded-md shadow-sm">
                             <div>
-                                <label htmlFor="email" className="sr-only">Email address</label>
+                                <label htmlFor="phone" className="sr-only">Phone</label>
                                 <input
                                     onChange={handleChange}
-                                    value={email || ""}
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    autoComplete="email"
+                                    value={phone || ""}
+                                    id="phone"
+                                    name="phone"
+                                    type="phone"
+                                    autoComplete="phone"
                                     required
                                     className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-pink-500 focus:outline-none focus:ring-pink-500 sm:text-sm"
-                                    placeholder="Email address"
+                                    placeholder="Phone"
                                 />
                             </div>
                         </div>

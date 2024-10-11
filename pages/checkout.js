@@ -11,8 +11,15 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
   const router = useRouter();
   const { session_id } = router.query;
 
+  const [name, setName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [country, setCountry] = useState('');
+  const [pincode, setPincode] = useState('');
+  const [landMark, setLandMark] = useState('');
 
   const handleChange = (e) => {
     if (e.target.name == 'phone') {
@@ -87,7 +94,7 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
       <h2 className='text-center text-xl font-semibold text-pink-500 my-4'>Check Out</h2>
       <hr />
       <form className='px-4 md:px-48'>
-        <h5 className='font-bold my-4'>1. Delivery Details</h5>
+        <h5 className='font-bold my-4'>1. Address Details</h5>
         <div className="grid gap-6 mb-6 md:grid-cols-2 ">
           <div>
             <label htmlFor="first_name" className="block mb-2 text-sm  text-gray-900 ">First name</label>
@@ -119,8 +126,8 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
           <textarea type="text" id="address" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows='2' placeholder="Enter your address" required />
         </div>
 
-        {/* 
-    <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button> */}
+
+        <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add New Address</button>
       </form>
 
 
@@ -168,9 +175,7 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
                 onClick={handlePayment}
                 type="button"
                 className="text-white bg-pink-500 hover:bg-pink-600 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center  mr-2 mb-2">
-                <AiFillShopping className="text-lg mx-1" />
-                Pay ₹{subTotal}
-              </button></Link>
+                <AiFillShopping className="text-lg mx-1" />Place Order</button></Link>
           </div>
         </div>
       </div>
