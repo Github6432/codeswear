@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 const Signup = () => {
   const router = useRouter();
   const [name, setName] = useState('');
+  const [lastname, setLastname] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [securityquestion, setSecurityquestion] = useState('');
@@ -25,32 +26,19 @@ const Signup = () => {
   // }, [])
 
   const handleChange = (e) => {
-    if (e.target.name == 'name') {
-      setName(e.target.value)
-    }
-    else if (e.target.name == 'email') {
-      setEmail(e.target.value)
-    }
-    else if (e.target.name == 'phone') {
-      setPhone(e.target.value)
-    }
-    else if (e.target.name == 'securityquestion') {
-      setSecurityquestion(e.target.value)
-    }
-    else if (e.target.name == 'answer') {
-      setAnswer(e.target.value)
-    }
-    else if (e.target.name == 'password') {
-      setPassword(e.target.value)
-    }
-    else if (e.target.name == 're-type-password') {
-      setRepassword(e.target.value)
-    }
+    if (e.target.name == 'name') { setName(e.target.value) }
+    else if (e.target.name == 'lastname') { setLastname(e.target.value) }
+    else if (e.target.name == 'email') { setEmail(e.target.value) }
+    else if (e.target.name == 'phone') { setPhone(e.target.value) }
+    else if (e.target.name == 'securityquestion') { setSecurityquestion(e.target.value) }
+    else if (e.target.name == 'answer') { setAnswer(e.target.value) }
+    else if (e.target.name == 'password') { setPassword(e.target.value) }
+    else if (e.target.name == 're-type-password') { setRepassword(e.target.value) }
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const data = { name, email, phone, securityquestion, answer, password, repassword }
+    const data = { name, lastname, email, phone, securityquestion, answer, password, repassword }
 
     let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/signup`, {
       method: "POST", // or 'PUT'
@@ -150,6 +138,19 @@ const Signup = () => {
                   required
                   className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-pink-500 focus:outline-none focus:ring-pink-500 sm:text-sm"
                   placeholder="Your Name"
+                />
+              </div>
+              <div>
+                <label htmlFor="lastname" className="sr-only">Lastname</label>
+                <input
+                  value={lastname || ""}
+                  onChange={handleChange}
+                  id="lastname"
+                  name="lastname"
+                  type="text"
+                  autoComplete="lastname"
+                  className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-pink-500 focus:outline-none focus:ring-pink-500 sm:text-sm"
+                  placeholder="Your Lastname"
                 />
               </div>
               <div>

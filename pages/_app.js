@@ -16,6 +16,7 @@ export default function App({ Component, pageProps }) {
 
   //USEFFECT GET ITEM LOCAL STORAGE
   useEffect(() => {
+    setKey(Math.random());
     router.events.on('routeChangeStart', ()=>{
       setProgress(50);
     })
@@ -100,6 +101,7 @@ export default function App({ Component, pageProps }) {
     <>
       <LoadingBar color='#ff2d55' progress={progress} onLoaderFinished={() => setProgress(0)} />
       { key && <Navbar user={user} key={key} logout={logout} cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />}
+      {/* <Navbar user={user} key={key} logout={logout} cart={cart} /> */}
       <Component {...pageProps} cart={cart} buyNow={buyNow} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />
       <Footer />
     </>
