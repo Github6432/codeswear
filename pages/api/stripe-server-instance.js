@@ -2,9 +2,7 @@ import Stripe from "stripe";
 export const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY);
 
 export default async function handler(req, res) {
-    const { cart, email, phone } = req.body;
-    console.log('phone', phone)
-    
+    const { cart, selectedAddress, email, phone } = req.body;
     // Convert cart object to array
     const cartItems = Object.values(cart);
 
@@ -31,9 +29,27 @@ export default async function handler(req, res) {
             mode: 'payment',
             metadata: {
                 phone: phone,
-              },
+                address: JSON.stringify({
+                    _id: selectedAddress._id,
+                    userid: selectedAddress.userid,
+                    name: selectedAddress.name,
+                    lastname: selectedAddress.lastname,
+                    email: selectedAddress.email,
+                    phone: selectedAddress.phone,
+                    city: selectedAddress.city,
+                    state: selectedAddress.state,
+                    country: selectedAddress.country,
+                    landmark: selectedAddress.landmark,
+                    pincode: selectedAddress.pincode,
+                }),
+                products: JSON.stringify(cartItems.map(item => ({
+                    name: item.name,
+                    description: `${item.size}, ${item.variant}`,
+                    quantity: item.qty,
+                    price: item.price,
+                })))
+            },
         });
-
         res.status(200).json({ session });
     } catch (error) {
         console.error('Error creating checkout session:', error);

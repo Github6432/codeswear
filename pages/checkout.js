@@ -7,6 +7,7 @@ import { MdDelete } from 'react-icons/md';
 import { useRouter } from 'next/router';
 import { loadStripe } from '@stripe/stripe-js';
 import { Bounce, toast } from 'react-toastify';
+import Order from '../models/Order';
 
 const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
   const router = useRouter();
@@ -27,11 +28,8 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
   const [showbutton, setShowbutton] = useState(true);
   const [selectedAddress, setSelectedAddress] = useState(null);
 
-  console.log(address.length)
-
-
   const handleSelect = (item) => {
-    setSelectedAddress(item);;
+    setSelectedAddress(item);
     setName(item.name);
     setLastname(item.lastname);
     setEmail(item.email);
@@ -60,10 +58,6 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
       console.error('Fetch error:', error);
     }
   };
-
-  console.log(showbutton)
-
-
   const updateAddress = () => {
     if (selectedAddress?._id) {
       toggleForm()
@@ -175,58 +169,64 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
   const toggleForm = () => {
     setShowform(!showform);
   };
+  const updateaddress = async () => {
+    const order = await Order.findOne({ phone });
+    if (order) {
+      order.status = 'Paid' // Update the order status
+      await order.save();
+    }
+  }
 
-  // const handlePayment = async () => {
-  //   console.log(cart, email, phone)
-  //   try {
-  //     const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/stripe-server-instance`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ cart, email, phone }),
-  //     });
-  //     const data = await res.json();
-  //     console.log('Payment data', data?.session);
-  //     // Redirect to the Stripe Checkout page
-  //     if (data?.session?.id) {
-  //       const response = await fetch('/api/save-order', {
-  //         method: 'POST', headers: { 'Content-Type': 'application/json', },
-  //         body: JSON.stringify({ session_id: data?.session?.id }),
-  //       });
-  //       const jsonData = await response.json();
-  //       console.log('paydata', jsonData)
-  //       const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
-  //       await stripe.redirectToCheckout({ sessionId: data.session.id });
-  //     } else {
-  //       console.error('Error saving the order:', error);
-  //     }
-  //   } catch (error) {
-  //     console.log('ERROR: =>', error)
-  //   }
-  // }
+  const handlePayment = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/stripe-server-instance`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ cart, selectedAddress, email, phone }),
+      });
+      const data = await res.json();
+      console.log('Payment data', data?.session);
+      // Redirect to the Stripe Checkout page
+      if (data?.session?.id) {
+        const response = await fetch('/api/save-order', {
+          method: 'POST', headers: { 'Content-Type': 'application/json', },
+          body: JSON.stringify({ session_id: data?.session?.id }),
+        });
+        const jsonData = await response.json();
+        console.log('paydata', jsonData)
+        const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+        await stripe.redirectToCheckout({ sessionId: data.session.id });
+        // updatePaymentStatus();
+      } else {
+        console.error('Error saving the order:', error);
+      }
+    } catch (error) {
+      console.log('ERROR: =>', error)
+    }
+  }
 
-  // useEffect(() => {
-  //   console.log('test ok')
-  //   const saveOrder = async () => {
-  //     if (session_id) {
-  // try {
-  //   const response = await fetch('/api/save-order', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ session_id }),
-  //   });
-  //   const data = await response.json();
-  //   console.log('paydata', data)
-  // } catch (error) {
-  //   console.error('Error saving the order:', error);
-  // }
-  // }
-  //   };
-  //   saveOrder()
-  // }, [session_id]);
+  useEffect(() => {
+    const saveOrder = async () => {
+      if (session_id) {
+        try {
+          const response = await fetch('/api/save-order', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ session_id }),
+          });
+          const data = await response.json();
+          console.log('paydata', data)
+        } catch (error) {
+          console.error('Error saving the order:', error);
+        }
+      }
+    };
+    saveOrder()
+  }, [session_id]);
 
 
   return (<>
@@ -363,12 +363,13 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
           </div>
           <div className="flex mt-2">
             <span className='font-bold py-2 mr-20'>SubTotal: ₹{subTotal}</span>
-            <Link href={'/payment'}>
+            <Link href={''}>
               <button
-                // onClick={handlePayment}
+                onClick={handlePayment}
                 type="button"
                 className="text-white bg-pink-500 hover:bg-pink-600 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center  mr-2 mb-2">
-                <AiFillShopping className="text-lg mx-1" />Continue To Pay</button></Link>
+                <AiFillShopping className="text-lg mx-1" />Continue To Pay</button>
+            </Link>
           </div>
         </div>
       </div>
