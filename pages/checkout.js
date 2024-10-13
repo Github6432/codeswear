@@ -24,12 +24,25 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
   const [userid, setUserid] = useState('');
   const [address, setAddress] = useState([]);
   const [showform, setShowform] = useState(true);
-  console.log(address)
+  const [showbutton, setShowbutton] = useState(true);
+  const [selectedAddress, setSelectedAddress] = useState(null);
 
-  const toggleForm = () => {
-    setShowform(!showform);
+  console.log(address.length)
+
+
+  const handleSelect = (item) => {
+    setSelectedAddress(item);;
+    setName(item.name);
+    setLastname(item.lastname);
+    setEmail(item.email);
+    setPhone(item.phone);
+    setCity(item.city);
+    setState(item.state);
+    setCountry(item.country);
+    setPincode(item.pincode);
+    setLandmark(item.landmark);
+    setUserid(item.userid);
   };
-
   const fetchUserAddress = async (userid) => {
     try {
       let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getaddress`, {
@@ -48,6 +61,38 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
     }
   };
 
+  console.log(showbutton)
+
+
+  const updateAddress = () => {
+    if (selectedAddress?._id) {
+      toggleForm()
+    } else {
+      alert('Plese Select the Address for Editing Or Add New Address')
+    }
+  }
+  const addNewAddress = () => {
+    setShowbutton(!showbutton)
+    toggleForm()
+  }
+  const updateUserAddress = async (id, name, lastname, email, phone, city, state, country, pincode, landmark) => {
+    try {
+      let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/updateaddress`, {
+        method: "POST", // or 'PUT'
+        headers: { "Content-Type": "application/json", },
+        body: JSON.stringify({ id, name, lastname, email, phone, city, state, country, pincode, landmark }),
+      });
+      let response = await res.json();
+      if (response.success) {
+        console.log(response)
+        window.location.reload();
+      } else {
+        console.log('Error fetching address:', response.message);
+      }
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
+  };
 
 
   useEffect(() => {
@@ -58,7 +103,10 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
         setUserid(decoded.userid);
       } catch (err) {
         console.error('Failed to decode token:', err);
+        router.push('/login')
       }
+    } else {
+      router.push('/login')
     }
   }, []);
 
@@ -81,8 +129,7 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
     else if (e.target.name == 'landmark') { setLandmark(e.target.value) }
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const addAddress = async () => {
     const data = { userid, name, lastname, email, phone, city, state, country, pincode, landmark, }
     let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/address`, {
       method: "POST", // or 'PUT'
@@ -92,6 +139,7 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
     let response = await res.json();
     const { massage, success, err } = response;
     if (success) {
+      window.location.reload()
       toast.success(massage, {
         position: "top-center",
         autoClose: 2000,
@@ -123,6 +171,9 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
     // setAnswer('');
     // setPassword('');
     // setRepassword('')
+  };
+  const toggleForm = () => {
+    setShowform(!showform);
   };
 
   // const handlePayment = async () => {
@@ -193,16 +244,24 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
                 <div className="flex flex-wrap -m-2">
                   {address.map(item => (
                     <div key={item._id} className="p-2 lg:w-1/3 md:w-1/2 w-full">
-                      <div className="h-full flex items-center border-gray-200 border p-4 rounded-lg">
+                      <div className="h-full flex items-center border-gray-400 border p-4 rounded-lg">
+                        <input
+                          type="radio"
+                          name="selectedAddress"
+                          className="mr-4 transform scale-150"
+                          onChange={() => handleSelect(item)}
+                          checked={selectedAddress?._id === item._id} // Check if the current address is selected
+                        />
                         <div className="flex-grow">
                           <div className="flex flex-wrap justify-between">
                             <h2 className="text-gray-900 title-font font-bold">{item.name} {item.lastname}</h2>
                             <h2 className="text-gray-900 title-font font-bold">{item.phone}</h2>
                           </div>
-                          <p >
-                            <span className="text-gray-950">Address :  </span>
-                            <span className='font-normal'>{item.landmark} {item.city} {item.state} {item.landmark} {item.country} {item.pincode}</span>
-                          </p>
+                          <div>
+                            <div className="text-black font-medium">Landmark: {item.landmark}</div>
+                            <span className="text-gray-950">Address : </span>
+                            <span className='font-normal'>{item.city} {item.state} {item.landmark} {item.country} - {item.pincode}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -210,12 +269,8 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
                 </div>
               </div>
             </section>
-
-
-
-
           </div>
-          {showform && <form className='px-4 md:px-48'>
+          {!showform && <form className='px-4 md:px-48'>
             <div className="grid gap-6 mb-6 md:grid-cols-2 ">
               <div>
                 <label htmlFor="name" className="block mb-2 text-sm  text-gray-900 ">First name</label>
@@ -255,10 +310,14 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
               <textarea type="text" name='landmark' id="landmark" onChange={handleChange} value={landmark} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows='2' placeholder="Landmark" required />
             </div>
           </form>}
-          {!showform && <h1>jskdfjslkfjsdl</h1>
-
-          }
-          <button onClick={toggleForm} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add New Address</button>
+          {!showform && <div className=' flex justify-center px-4 md:px-48'>
+            {!showbutton && <button onClick={() => addAddress(userid, name, lastname, email, phone, city, state, country, pincode, landmark)} className="mx-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add Address</button>}
+            {showbutton && <button onClick={() => updateUserAddress(selectedAddress._id, name, lastname, email, phone, city, state, country, pincode, landmark)} className="mx-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update Address</button>}
+          </div>}
+          {showform && <div className=' flex justify-center px-4 md:px-48'>
+            {<button onClick={addNewAddress} className="mx-6 text-white bg-pink-700 hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-pink-300  rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800">Add New Address</button>}
+            {<button onClick={updateAddress} className="mx-6 text-white bg-pink-700 hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-pink-300  rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800">Edit Address</button>}
+          </div>}
 
         </div>
       </>}
@@ -304,12 +363,12 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
           </div>
           <div className="flex mt-2">
             <span className='font-bold py-2 mr-20'>SubTotal: ₹{subTotal}</span>
-            <Link href={'/checkout'}>
+            <Link href={'/payment'}>
               <button
                 // onClick={handlePayment}
                 type="button"
                 className="text-white bg-pink-500 hover:bg-pink-600 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center  mr-2 mb-2">
-                <AiFillShopping onSubmit={handleSubmit} className="text-lg mx-1" />Continue To Pay</button></Link>
+                <AiFillShopping className="text-lg mx-1" />Continue To Pay</button></Link>
           </div>
         </div>
       </div>
