@@ -9,7 +9,8 @@ const OrderSchema = new mongoose.Schema({
             name: { type: String, required: true },
             description: { type: String, required: true },
             quantity: { type: Number, required: true },
-            price: { type: Number, required: true }, // Change to Number for consistency
+            price: { type: Number, required: true },
+            image: { type: String, required: false },
         }
     ],
     amount: { type: String, required: true },

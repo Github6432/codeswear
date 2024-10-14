@@ -69,9 +69,9 @@ const Navbar = ({ user, cart, addToCart, removeFromCart, deleteCartItem, subTota
           <div className="item flex">
             <div className='text-sm mx-1 w-56'>{cart[k].name}</div>
             <div className="w-1/3 flex font-semibold text-center content-between items-center text-lg">
-              <AiFillMinusSquare onClick={() => { removeFromCart(k, 1, cart[k].name, cart[k].size, cart[k].variant) }} className="text-pink-500 cursor-pointer" />
+              <AiFillMinusSquare onClick={() => { removeFromCart(k, 1, cart[k].name, cart[k].size, cart[k].variant, cart[k].image) }} className="text-pink-500 cursor-pointer" />
               <span className="flex font-semibold mx-1 justify-center w-4">{cart[k].qty}</span>
-              <AiFillPlusSquare onClick={() => { addToCart(k, 1, cart[k].name, cart[k].size, cart[k].variant) }} className="text-pink-500 cursor-pointer" />
+              <AiFillPlusSquare onClick={() => { addToCart(k, 1, cart[k].name, cart[k].size, cart[k].variant, cart[k].image) }} className="text-pink-500 cursor-pointer" />
               <MdDelete className='text-pink-700 cursor-pointer mx-2' onClick={() => { deleteCartItem(Object.keys(cart)[0]) }} />
             </div>
           </div>

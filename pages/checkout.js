@@ -177,6 +177,7 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
     }
   }
 
+
   const handlePayment = async () => {
     try {
       if(!selectedAddress?._id){

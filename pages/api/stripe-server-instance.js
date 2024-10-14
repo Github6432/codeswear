@@ -5,7 +5,6 @@ export default async function handler(req, res) {
     const { cart, selectedAddress, email, phone } = req.body;
     // Convert cart object to array
     const cartItems = Object.values(cart);
-
     // Create line items for Stripe session
     const line_items = cartItems.map(item => ({
         price_data: {
@@ -47,6 +46,7 @@ export default async function handler(req, res) {
                     description: `${item.size}, ${item.variant}`,
                     quantity: item.qty,
                     price: item.price,
+                    image: item.image,
                 })))
             },
         });

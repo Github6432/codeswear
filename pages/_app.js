@@ -64,7 +64,7 @@ export default function App({ Component, pageProps }) {
   };
 
   //REMOVE FROM CART
-  const removeFromCart = (itemCode, qty, price, name, size, variant) => {
+  const removeFromCart = (itemCode, qty, price, name, size, varian, image) => {
     let newCart = { ...cart };
     if (itemCode in newCart) {
       newCart[itemCode].qty -= qty;
