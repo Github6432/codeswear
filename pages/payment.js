@@ -27,8 +27,6 @@ const Payment = ({ cart, addToCart, removeFromCart, subTotal }) => {
   const [showbutton, setShowbutton] = useState(true);
   const [selectedAddress, setSelectedAddress] = useState(null);
 
-  console.log(address.length)
-
 
   const handleSelect = (item) => {
     setSelectedAddress(item);;
@@ -84,7 +82,7 @@ const Payment = ({ cart, addToCart, removeFromCart, subTotal }) => {
       });
       let response = await res.json();
       if (response.success) {
-        console.log(response)
+        // console.log(response)
         window.location.reload();
       } else {
         console.log('Error fetching address:', response.message);

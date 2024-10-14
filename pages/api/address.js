@@ -7,7 +7,6 @@ const handler = async (req, res) => {
         const { userid, name, lastname, email, phone, city, state, country, landmark, pincode } = req.body;
         try {
             const address = new Address({ userid, name, lastname, email, phone, city, state, country, landmark, pincode });
-            console.log(address)
             await address.save();
             res.status(200).json({ massage: 'New address Add Successfully !', success: true });
         } catch (err) {

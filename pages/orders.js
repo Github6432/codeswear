@@ -2,9 +2,11 @@ import React, { useEffect } from 'react';
 import Order from '../models/Order';
 import { useRouter } from 'next/router';
 import mongoose from 'mongoose';
+import Link from 'next/link';
 
 const Orders = ({ orders }) => {
     const router = useRouter();
+    console.log(orders)
 
     useEffect(() => {
         if (!localStorage.getItem('token')) {
@@ -28,7 +30,7 @@ const Orders = ({ orders }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {orders.flatMap((order, i) => 
+                        {orders.flatMap((order, i) =>
                             order.products.map((product, j) => (
                                 <tr key={product._id} className="border-b text-center border-neutral-200 dark:border-white/10">
                                     <td className="py-4 font-medium">{i * order.products.length + j + 1}</td> {/* Unique Serial Number */}
@@ -37,7 +39,9 @@ const Orders = ({ orders }) => {
                                     <td className="whitespace-nowrap px-6 py-4">{product.quantity}</td>
                                     <td className="whitespace-nowrap px-6 py-4">{order.address.name}</td>
                                     <td className="whitespace-nowrap px-6 py-4">
-                                        <button className="bg-pink-500 text-white font-bold py-1 p-2 rounded hover:bg-pink-400">Track & Details</button>
+                                        <Link href={`/order?${order._id}`}>
+                                            <button className="bg-pink-500 text-white font-bold py-1 p-2 rounded hover:bg-pink-400">Track & Details</button>
+                                        </Link>
                                     </td>
                                 </tr>
                             ))

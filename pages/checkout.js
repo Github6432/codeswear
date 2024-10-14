@@ -78,7 +78,7 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
       });
       let response = await res.json();
       if (response.success) {
-        console.log(response)
+        // console.log(response)
         window.location.reload();
       } else {
         console.log('Error fetching address:', response.message);

@@ -1,7 +1,10 @@
+import mongoose from "mongoose";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
+import Order from "../models/Order";
 
-const Order = () => {
+const MyOrder = ({ order }) => {
+  console.log(order)
   const router = useRouter();
   useEffect(() => {
     if (!localStorage.getItem('token')) {
@@ -64,4 +67,15 @@ const Order = () => {
   );
 };
 
-export default Order;
+export async function getServerSideProps(context) {
+  if (!mongoose.connections[0].readyState) {
+    await mongoose.connect(process.env.MONGO_URI);
+  }
+  const { query } = context;
+  const orderId = Object.keys(query)[0];
+  let order = await Order.findById(orderId);
+  return {
+    props: { order: JSON.parse(JSON.stringify(order)) }, // will be passed to the page component as props
+  };
+}
+export default MyOrder;
