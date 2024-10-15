@@ -6,10 +6,11 @@ import { AiFillPlusSquare, AiFillMinusSquare, AiFillShopping } from "react-icons
 import { MdDelete } from 'react-icons/md';
 import { useRouter } from 'next/router';
 import { loadStripe } from '@stripe/stripe-js';
-import { Bounce, toast } from 'react-toastify';
+import { Bounce, toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Order from '../models/Order';
 
-const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
+const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
   const router = useRouter();
   const { session_id } = router.query;
 
@@ -180,7 +181,7 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
 
   const handlePayment = async () => {
     try {
-      if(!selectedAddress?._id){
+      if (!selectedAddress?._id) {
         alert('Please Select The address for place order')
       }
       const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/stripe-server-instance`, {
@@ -188,9 +189,23 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ cart, selectedAddress, email, phone }),
+        body: JSON.stringify({ cart, subTotal, selectedAddress, email, phone }),
       });
       const data = await res.json();
+      if (!data.success) {
+        clearCart()
+        toast.error(data.error || 'An error occurred.', {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+      }
       console.log('Payment data', data?.session);
       // Redirect to the Stripe Checkout page
       if (data?.session?.id) {
@@ -235,6 +250,18 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
 
   return (<>
     <div>
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <h2 className='text-center text-xl font-semibold text-pink-500 my-4'>Check Out</h2>
       <hr />
       {address && <>

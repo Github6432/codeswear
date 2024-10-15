@@ -1,10 +1,24 @@
 import Stripe from "stripe";
+import Product from '../../models/Product';
 export const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY);
 
 export default async function handler(req, res) {
-    const { cart, selectedAddress, email, phone } = req.body;
-    // Convert cart object to array
+    const { cart, subTotal, selectedAddress, email, phone } = req.body;
     const cartItems = Object.values(cart);
+
+    //check cart tempring
+    let product, cartSubTotal = 0;
+    for (let item in cart) {
+        cartSubTotal += cart[item].price * cart[item].qty
+        product = await Product.findOne({ slug: item });
+        if (product.price != cart[item].price) {
+            return res.status(200).json({ success: false, error: 'The price of some items in your cart have Changed. Please try again' })
+        }
+    }
+    if (cartSubTotal !== subTotal) {
+        return rea.status(200).json({ success: false, error: 'Your cart Total price is  chenged. Please retry' })
+
+    }
     // Create line items for Stripe session
     const line_items = cartItems.map(item => ({
         price_data: {
@@ -50,7 +64,7 @@ export default async function handler(req, res) {
                 })))
             },
         });
-        res.status(200).json({ session });
+        res.status(200).json({ success: true, session });
     } catch (error) {
         console.error('Error creating checkout session:', error);
         res.status(500).json({ error: 'Unable to create checkout session' });

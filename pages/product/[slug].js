@@ -18,8 +18,20 @@ const Slug = ({ buyNow, addToCart, variants, product }) => {
     const checkServiceability = async () => {
         let pins = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pincode`);
         let pinJson = await pins.json();
-
-        if (pinJson.includes(parseInt(pin))) {
+        if (!(pin.length === 6)) {
+            setService(false);
+            toast.error('Please Enter Valid PinCode', {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+        }else if (pinJson.includes(parseInt(pin))) {
             setService(true);
             toast.success('Yay! We serve the area.', {
                 position: "top-center",
@@ -77,7 +89,8 @@ const Slug = ({ buyNow, addToCart, variants, product }) => {
                         <img alt="ecommerce" className="w-2/3 md:w-1/4 mx-auto object-cover object-center rounded" src={product.img} />
                         <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
                             <h2 className="text-sm title-font text-gray-500 tracking-widest">JMT BRAND</h2>
-                            <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">{product.title}({product.size}/{product.color})</h1>
+                            <h1 className="text-gray-900 text-3xl title-font font-medium mb-1 uppercase">{product.title} [ {product.size} / {product.color} ]</h1>
+                            <hr />
                             <div className="flex mb-4">
                                 <span className="flex items-center">
                                     <svg fill="currentColor" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} className="w-4 h-4 text-pink-500" viewBox="0 0 24 24">

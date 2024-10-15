@@ -17,10 +17,10 @@ export default function App({ Component, pageProps }) {
   //USEFFECT GET ITEM LOCAL STORAGE
   useEffect(() => {
     setKey(Math.random());
-    router.events.on('routeChangeStart', ()=>{
+    router.events.on('routeChangeStart', () => {
       setProgress(50);
     })
-    router.events.on('routeChangeComplete', ()=>{
+    router.events.on('routeChangeComplete', () => {
       setProgress(100);
     })
     try {
@@ -97,12 +97,16 @@ export default function App({ Component, pageProps }) {
 
   }
 
+  const clearCart = () => {
+    localStorage.removeItem('cart');
+  }
+
   return (
     <>
       <LoadingBar color='#ff2d55' progress={progress} onLoaderFinished={() => setProgress(0)} />
-      { key && <Navbar user={user} key={key} logout={logout} cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />}
+      {key && <Navbar user={user} key={key} logout={logout} cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />}
       {/* <Navbar user={user} key={key} logout={logout} cart={cart} /> */}
-      <Component {...pageProps} cart={cart} buyNow={buyNow} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />
+      <Component {...pageProps} cart={cart} clearCart={clearCart} buyNow={buyNow} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />
       <Footer />
     </>
   );
