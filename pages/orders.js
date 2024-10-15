@@ -1,16 +1,37 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Order from '../models/Order';
 import { useRouter } from 'next/router';
 import mongoose from 'mongoose';
 import Link from 'next/link';
 
-const Orders = ({ orders }) => {
+const Orders = () => {
     const router = useRouter();
-    console.log(orders)
+    const [orders, setOrders] = useState([]);
+
+    const fetchOrders = async () => {
+        try {
+            console.log('Fetching orders...');
+            let data = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/myorders`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ token: localStorage.getItem('token') }),
+            });
+            let res = await data.json();
+            setOrders(res.orders);
+            console.log('Orders fetched:', res.orders);
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+        }
+    };
+
 
     useEffect(() => {
         if (!localStorage.getItem('token')) {
             router.push('/');
+        } else {
+            fetchOrders();
         }
     }, [router]);
 
@@ -51,16 +72,6 @@ const Orders = ({ orders }) => {
             </div>
         </div>
     );
-}
-
-export async function getServerSideProps(context) {
-    if (!mongoose.connections[0].readyState) {
-        await mongoose.connect(process.env.MONGO_URI);
-    }
-    let orders = await Order.find({});
-    return {
-        props: { orders: JSON.parse(JSON.stringify(orders)) }, // will be passed to the page component as props
-    };
 }
 
 export default Orders;

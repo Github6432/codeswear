@@ -93,8 +93,8 @@ const Checkout = ({ cart, addToCart, removeFromCart, subTotal }) => {
     const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
     if (token) {
       try {
-        const decoded = jwt.decode(token);
-        setUserid(decoded.userid);
+        const data = jwt.decode(token);
+        setUserid(data.userid);
       } catch (err) {
         console.error('Failed to decode token:', err);
         router.push('/login')
