@@ -181,9 +181,6 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
 
   const handlePayment = async () => {
     try {
-      if (!selectedAddress?._id) {
-        alert('Please Select The address for place order')
-      }
       const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/stripe-server-instance`, {
         method: 'POST',
         headers: {

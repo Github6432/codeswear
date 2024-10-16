@@ -170,6 +170,7 @@ const Slug = ({ buyNow, addToCart, variants, product }) => {
                                             </svg>
                                         </span>
                                     </div>
+                                    <div className='mx-6'>Available Quantity: {product.availableQty}</div>
                                 </div>
                             </div>
                             <div className='flex justify-center items-center mb-2'>

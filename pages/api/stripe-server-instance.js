@@ -6,6 +6,10 @@ export default async function handler(req, res) {
     const { cart, subTotal, selectedAddress, email, phone } = req.body;
     const cartItems = Object.values(cart);
 
+    if(!selectedAddress){
+        return res.status(400).json({ success: false, error: 'Please Select the address then place the order.' });
+    }
+
     //check cart tempring
     let product, cartSubTotal = 0;
     for (let item in cart) {
@@ -13,6 +17,15 @@ export default async function handler(req, res) {
         product = await Product.findOne({ slug: item });
         if (product.price != cart[item].price) {
             return res.status(200).json({ success: false, error: 'The price of some items in your cart have Changed. Please try again' })
+        }
+        // Check if there's enough quantity available
+        if (product.availableQty < cart[item].qty) {
+            return res.status(200).json({ success: false, error: 'Not enough quantity available for some items.' });
+        }
+
+        // Update the available quantity
+        if (selectedAddress) {
+            await Product.findByIdAndUpdate(product._id, { $inc: { availableQty: - cart[item].qty } });
         }
     }
     if (cartSubTotal !== subTotal) {
