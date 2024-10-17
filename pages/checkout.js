@@ -10,7 +10,7 @@ import { Bounce, toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Order from '../models/Order';
 
-const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
+const Checkout = ({ cart, addToCart, removeFromCart, deleteCartItem, clearCart, subTotal }) => {
   const router = useRouter();
   const { session_id } = router.query;
 
@@ -179,6 +179,8 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
   }
 
 
+
+
   const handlePayment = async () => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/stripe-server-instance`, {
@@ -212,6 +214,8 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
         });
         const jsonData = await response.json();
         console.log('paydata', jsonData)
+        console.log(jsonData.porder._id)
+        localStorage.setItem('orderid', jsonData.porder._id)
         const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
         await stripe.redirectToCheckout({ sessionId: data.session.id });
         // updatePaymentStatus();
@@ -393,9 +397,10 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
             <span className='font-bold py-2 mr-20'>SubTotal: ₹{subTotal}</span>
             <Link href={''}>
               <button
+              disabled={Object.keys(cart).length === 0}
                 onClick={handlePayment}
                 type="button"
-                className="text-white bg-pink-500 hover:bg-pink-600 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center  mr-2 mb-2">
+                className="text-white disabled:bg-pink-300 bg-pink-500 hover:bg-pink-600 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center  mr-2 mb-2">
                 <AiFillShopping className="text-lg mx-1" />Continue To Pay</button>
             </Link>
           </div>

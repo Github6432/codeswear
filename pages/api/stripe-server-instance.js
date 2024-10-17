@@ -1,13 +1,17 @@
 import Stripe from "stripe";
 import Product from '../../models/Product';
+import Order from '../../models/Order';
 export const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY);
 
 export default async function handler(req, res) {
     const { cart, subTotal, selectedAddress, email, phone } = req.body;
     const cartItems = Object.values(cart);
 
-    if(!selectedAddress){
+    if (!selectedAddress) {
         return res.status(400).json({ success: false, error: 'Please Select the address then place the order.' });
+    }
+    if (String(phone).length !== 10) {
+        return res.status(400).json({ success: false, error: 'Only mobile no allow 10 digit.' });
     }
 
     //check cart tempring
@@ -21,11 +25,6 @@ export default async function handler(req, res) {
         // Check if there's enough quantity available
         if (product.availableQty < cart[item].qty) {
             return res.status(200).json({ success: false, error: 'Not enough quantity available for some items.' });
-        }
-
-        // Update the available quantity
-        if (selectedAddress) {
-            await Product.findByIdAndUpdate(product._id, { $inc: { availableQty: - cart[item].qty } });
         }
     }
     if (cartSubTotal !== subTotal) {
@@ -78,6 +77,11 @@ export default async function handler(req, res) {
             },
         });
         res.status(200).json({ success: true, session });
+        for (let item in cart) {
+            product = await Product.findOne({ slug: item });
+            // Update the available quantity
+            await Product.findByIdAndUpdate(product._id, { $inc: { availableQty: - cart[item].qty } });
+        }
     } catch (error) {
         console.error('Error creating checkout session:', error);
         res.status(500).json({ error: 'Unable to create checkout session' });

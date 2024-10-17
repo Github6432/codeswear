@@ -15,6 +15,7 @@ const OrderSchema = new mongoose.Schema({
     ],
     amount: { type: String, required: true },
     status: { type: String, required: true },
+    orderStatus: {type: String, default: 'Pending', required: true},
     address: {
         _id: false,
         userid: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Ref to user if necessary

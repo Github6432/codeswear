@@ -8,15 +8,11 @@ export default async function handler(req, res) {
         const { session_id } = req.body;
         try {
             const session = await stripe.checkout.sessions.retrieve(session_id);
-            // console.log('SSSSSSSSSSSS', session.metadata.products)
-            // Create an order object to save in the database
-
             const order = {
                 email: session.customer_email,
                 phone: session.metadata.phone,
                 amount: session.amount_total,
                 status: session.payment_status,
-                // products: products,
                 paymentIntent: session.payment_intent,
                 address: JSON.parse(session.metadata.address),
                 products: JSON.parse(session.metadata.products),

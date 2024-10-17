@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Order from '../models/Order';
 import { useRouter } from 'next/router';
-import mongoose from 'mongoose';
 import Link from 'next/link';
 
 const Orders = () => {
@@ -26,8 +24,28 @@ const Orders = () => {
         }
     };
 
+    const updataPaymentStatus = async () => {
+        try {
+            const orderId = localStorage.getItem('orderid');
+            console.log(orderId)
+            const data = await fetch('/api/updatepaymentstatus', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: orderId }),
+            });
+            let res = await data.json();
+            console.log('Paid Data', res)
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+        }
+    };
 
     useEffect(() => {
+        if (localStorage.getItem('orderid')) {
+            updataPaymentStatus()
+        }
         if (!localStorage.getItem('token')) {
             router.push('/');
         } else {
@@ -47,6 +65,8 @@ const Orders = () => {
                             <th scope="col" className="px-6 py-4">Price</th>
                             <th scope="col" className="px-6 py-4">Qty.</th>
                             <th scope="col" className="px-6 py-4">Name</th>
+                            <th scope="col" className="px-6 py-4">Payment Status</th>
+                            <th scope="col" className="px-6 py-4">Order Status</th>
                             <th scope="col" className="px-6 py-4">Track</th>
                         </tr>
                     </thead>
@@ -59,6 +79,8 @@ const Orders = () => {
                                     <td className="whitespace-nowrap px-6 py-4">{product.price}</td>
                                     <td className="whitespace-nowrap px-6 py-4">{product.quantity}</td>
                                     <td className="whitespace-nowrap px-6 py-4">{order.address.name}</td>
+                                    <td className="whitespace-nowrap px-6 py-4 uppercase">{order.status == 'paid' ? 'Success' : order.status}</td>
+                                    <td className="whitespace-nowrap px-6 py-4 uppercase">{order.orderStatus}</td>
                                     <td className="whitespace-nowrap px-6 py-4">
                                         <Link href={`/order?${order._id}`}>
                                             <button className="bg-pink-500 text-white font-bold py-1 p-2 rounded hover:bg-pink-400">Track & Details</button>
