@@ -25,15 +25,12 @@ const Navbar = ({ user, cart, addToCart, removeFromCart, deleteCartItem, subTota
   return (
     <>
       <span>
-        <span className='flex  cursor-pointer absolute top-4 mx-10 right-2 text-2xl text-pink-500 z-30' onMouseOver={() => { setDropdown(true) }} >
-          {user.value && <MdAccountCircle className="mx-2 hover:text-pink-800" />}
-        </span>
         {dropdown && (
           <>
             <div
               onMouseOver={() => { setDropdown(true) }}
               onMouseLeave={() => { setDropdown(false) }}
-              className=" absolute right-2 top-12 my-1 px-5 py-1 w-32 text-base rounded-md text-pink-900 bg-pink-200"
+              className=" absolute right-2 md:top-12 top-16 my-2 px-5 py-1 w-32 text-base rounded-md text-pink-900 bg-pink-200"
             >
               <ul>
                 <Link href={'/myaccount'} legacyBehavior>
@@ -73,6 +70,9 @@ const Navbar = ({ user, cart, addToCart, removeFromCart, deleteCartItem, subTota
           {!user.value && <Link href={'/login'} >
             <button className='right-0 mx-8 flex items-center justify-center  hover:text-pink-800  bg-pink-600 px-2 rounded-md py-1 text-xs text-white'>Login</button>
           </Link>}
+          <span className='flex  cursor-pointer  mx-2 text-2xl text-pink-500 z-30' onMouseOver={() => { setDropdown(true) }} >
+            {user.value && <MdAccountCircle className="mx-2 hover:text-pink-800" />}
+          </span>
           <span className="relative inline-flex  cursor-pointer " onClick={toggleCart}>
             <AiOutlineShoppingCart className='text-xl md:text-2xl hover:text-pink-800' />
           </span>
