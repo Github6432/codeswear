@@ -25,28 +25,33 @@ const Navbar = ({ user, cart, addToCart, removeFromCart, deleteCartItem, subTota
   return (
     <>
       <span>
+        <span className='flex  cursor-pointer absolute top-4 mx-10 right-2 text-2xl text-pink-500 z-30' onMouseOver={() => { setDropdown(true) }} >
+          {user.value && <MdAccountCircle className="mx-2 hover:text-pink-800" />}
+        </span>
         {dropdown && (
-          <div
-            onMouseOver={() => { setDropdown(true) }}
-            onMouseLeave={() => { setDropdown(false) }}
-            className=" absolute right-2 top-12 my-1 px-5 py-1 w-32 hover:w-36 text-base rounded-md text-pink-900 bg-pink-200 z-50"
-          >
-            <ul>
-              <Link href={'/myaccount'} legacyBehavior>
-                <a><li className='py-1 hover:text-red-500 hover:font-bold'>My Account</li></a>
-              </Link>
-              <Link href={'/orders'} legacyBehavior>
-                <a><li className='py-1 hover:text-red-500 hover:font-bold'>Orders</li></a>
-              </Link>
-              <a onClick={logout}>
-                <li className='py-1 hover:text-red-500 hover:font-bold cursor-pointer'>Logout</li>
-              </a>
-            </ul>
-          </div>
+          <>
+            <div
+              onMouseOver={() => { setDropdown(true) }}
+              onMouseLeave={() => { setDropdown(false) }}
+              className=" absolute right-2 top-12 my-1 px-5 py-1 w-32 text-base rounded-md text-pink-900 bg-pink-200"
+            >
+              <ul>
+                <Link href={'/myaccount'} legacyBehavior>
+                  <a><li className='py-1 hover:text-red-500 '>My Account</li></a>
+                </Link>
+                <Link href={'/orders'} legacyBehavior>
+                  <a><li className='py-1 hover:text-red-500 '>Orders</li></a>
+                </Link>
+                <a onClick={logout}>
+                  <li className='py-1 hover:text-red-500  cursor-pointer'>Logout</li>
+                </a>
+              </ul>
+            </div>
+          </>
         )}
 
       </span>
-      <div className={`flex flex-col  items-center justify-start md:flex-row shadow-xl my-1 sticky top-0 z-50 bg-white ${!sidebar && 'overflow-hidden'}`}>
+      <div className={`flex flex-col  items-center justify-start md:flex-row shadow-xl my-1 sticky top-0 bg-white ${!sidebar && 'overflow-hidden'}`}>
         {/* <div className="logo mx-5 flex justify-start w-full md:w-auto"> */}
         <div className='logo mr-auto md:mx-5'>
           <Link href={'/'}>
@@ -64,9 +69,7 @@ const Navbar = ({ user, cart, addToCart, removeFromCart, deleteCartItem, subTota
           </ul>
         </div>
         <div className="cart flex absolute top-3 right-0 mx-8 text-2xl text-pink-500">
-          <span onMouseOver={() => { setDropdown(true) }}>
-            {user.value && <MdAccountCircle className="mx-2 hover:text-pink-800" />}
-          </span>
+
           {!user.value && <Link href={'/login'} >
             <button className='right-0 mx-8 flex items-center justify-center  hover:text-pink-800  bg-pink-600 px-2 rounded-md py-1 text-xs text-white'>Login</button>
           </Link>}

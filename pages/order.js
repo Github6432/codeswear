@@ -14,10 +14,10 @@ const MyOrder = ({ order }) => {
   return (
     <div>
       <section className="text-gray-600 body-font overflow-hidden">
-        <div className="container px-5 py-24 mx-auto">
+        <div className="container px-5 py-10 mx-auto">
 
           <h1 className="text-gray-900 text-xl text-center font-medium">Oder ID: #{order._id.toUpperCase()}</h1>
-          <p className="text-green-400 text-center mb-4">Your order has been successfully placed.</p>
+          <p className={`${order.orderStatus == 'Pending' ? 'text-red-500' : 'text-green-400'} text-center mb-7`}>Your order has been {order.orderStatus}.</p>
           {order.products.map((item) => (
             <>
               <div className=" md:w-4/6 mx-auto mb-6 border p-4 rounded-lg shadow-md flex items-center justify-center flex-wrap">
