@@ -11,9 +11,6 @@ const Navbar = ({ user, cart, addToCart, removeFromCart, deleteCartItem, subTota
   const [dropdown, setDropdown] = useState(false);
   const [sidebar, setSidebar] = useState(false);
 
-  // useEffect(() => {
-  //   Object.keys(cart).length !== 0 && setSidebar(true)
-  // }, [])
 
 
   const toggleDropdown = () => {
@@ -30,14 +27,14 @@ const Navbar = ({ user, cart, addToCart, removeFromCart, deleteCartItem, subTota
             <div
               onMouseOver={() => { setDropdown(true) }}
               onMouseLeave={() => { setDropdown(false) }}
-              className=" absolute right-2 md:top-12 top-16 my-2 px-5 py-1 w-32 text-base rounded-md text-pink-900 bg-pink-200"
+              className=" fixed right-2 md:top-12 top-16 my-2 px-5 py-1 w-32 text-base rounded-md text-pink-900 bg-pink-200"
             >
               <ul>
                 <Link href={'/myaccount'} legacyBehavior>
                   <a><li className='py-1 hover:text-red-500 '>My Account</li></a>
                 </Link>
                 <Link href={'/orders'} legacyBehavior>
-                  <a><li className='py-1 hover:text-red-500 '>Orders</li></a>
+                  <a><li className='py-1 hover:text-red-500 '>My Orders</li></a>
                 </Link>
                 <a onClick={logout}>
                   <li className='py-1 hover:text-red-500  cursor-pointer'>Logout</li>
@@ -46,16 +43,15 @@ const Navbar = ({ user, cart, addToCart, removeFromCart, deleteCartItem, subTota
             </div>
           </>
         )}
-
       </span>
       <div className={`flex flex-col  items-center justify-start md:flex-row shadow-xl my-1 sticky top-0 bg-white ${!sidebar && 'overflow-hidden'}`}>
-        {/* <div className="logo mx-5 flex justify-start w-full md:w-auto"> */}
+        <div className="logo mx-5 flex justify-start w-full md:w-auto">
         <div className='logo mr-auto md:mx-5'>
           <Link href={'/'}>
             <Image className='pb-1' src="/assets/nav.png" alt="" width={200} height={40} />
           </Link>
         </div>
-        {/* </div> */}
+        </div>
 
         <div className="nav">
           <ul className='flex items-center space-x-2 font-semibold'>
