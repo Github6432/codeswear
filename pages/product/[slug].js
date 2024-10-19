@@ -4,10 +4,15 @@ import React, { useState } from 'react'
 import Product from "@/models/Product";
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Link from 'next/link';
+import Invalid from '../invalid';
 
-const Slug = ({ buyNow, addToCart, variants, product }) => {
-    // console.log(product)
-    // console.log(variants)
+const Slug = ({ buyNow, addToCart, variants, product, error }) => {
+    if (error == '404') {
+        return (
+            <><Invalid /></>
+        );
+    }
     const router = useRouter();
     const { slug } = router.query;
     const [pin, setPin] = useState();
@@ -31,7 +36,7 @@ const Slug = ({ buyNow, addToCart, variants, product }) => {
                 theme: "light",
                 transition: Bounce,
             });
-        }else if (pinJson.includes(parseInt(pin))) {
+        } else if (pinJson.includes(parseInt(pin))) {
             setService(true);
             toast.success('Yay! We serve the area.', {
                 position: "top-center",
@@ -182,9 +187,10 @@ const Slug = ({ buyNow, addToCart, variants, product }) => {
                                 {(service && service !== null) && <div className="text-sm text-green-700 mt-1">Yay! We serve the area.</div>}
                             </div>
                             <div className="flex">
-                                <span className="title-font font-medium text-lg text-gray-900">Price : ₹{product.price}</span>
-                                <button onClick={() => { buyNow(slug, 1, product.price, product.title, product.size, product.color, product.img) }} className="ml-auto text-sm text-white bg-pink-600 border-0 w-20 h-8 mx-5 focus:outline-none hover:bg-pink-800 rounded">Buy Now</button>
-                                <button onClick={() => { addToCart(slug, 1, product.price, product.title, product.size, product.color, product.img) }} className="ml-auto text-sm text-white bg-pink-600 border-0 w-24 h-8 mx-5 focus:outline-none hover:bg-pink-800 rounded">Add to Cart</button>
+                                {product.availableQty <= 0 && <span className="title-font font-medium text-lg text-gray-900">Out of Stock</span>}
+                                {product.availableQty > 0 && <span className="title-font font-medium text-lg text-gray-900">Price : ₹{product.price}</span>}
+                                <button disabled={product.availableQty <= 0} onClick={() => { buyNow(slug, 1, product.price, product.title, product.size, product.color, product.img) }} className="ml-auto text-sm text-white disabled:bg-pink-400 bg-pink-600 border-0 w-20 h-8 mx-5 focus:outline-none hover:bg-pink-800 rounded">Buy Now</button>
+                                <button disabled={product.availableQty <= 0} onClick={() => { addToCart(slug, 1, product.price, product.title, product.size, product.color, product.img) }} className="ml-auto text-sm text-white disabled:bg-pink-400 bg-pink-600 border-0 w-24 h-8 mx-5 focus:outline-none hover:bg-pink-800 rounded">Add to Cart</button>
 
                             </div>
                         </div>
@@ -200,6 +206,9 @@ export async function getServerSideProps(context) {
         await mongoose.connect(process.env.MONGO_URI);
     }
     let product = await Product.findOne({ slug: context.query.slug })
+    if (product == null) {
+        return { props: { error: '404' } }
+    }
     let variants = await Product.find({ title: product.title })
     let colorSizeSlug = {};
     for (let item of variants) {

@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import LoadingBar from 'react-top-loading-bar'
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import jwt from "jsonwebtoken";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -12,7 +13,10 @@ export default function App({ Component, pageProps }) {
   const [cart, setCart] = useState({});
   const [subTotal, setSubTotal] = useState(0);
   const [progress, setProgress] = useState(0)
-  const [user, setUser] = useState({ value: null });
+  const [usertoken, setUsertoken] = useState({ value: null });
+  const [user, setUser] = useState({});
+  const [address, setAddress] = useState({});
+  const [userid, setUserid] = useState();
 
   //USEFFECT GET ITEM LOCAL STORAGE
   useEffect(() => {
@@ -35,10 +39,22 @@ export default function App({ Component, pageProps }) {
     }
     const token = localStorage.getItem("token");
     if (token) {
-      setUser({ value: token })
+      const data = jwt.decode(token);
+      if (data.userid) {
+        setUserid(data.userid);
+      }
+      setUsertoken({ value: token })
       setKey(Math.random());
     }
   }, [router.query])
+  useEffect(() => {
+    if (userid) {
+      fetchUser(userid);
+      fetchUserAddress(userid)
+    }
+  }, [userid]); // Only call fetchUser when userid is available
+
+
 
   //SAVE CART & SUB TOTAL
   const saveCart = (newCart) => {
@@ -101,12 +117,51 @@ export default function App({ Component, pageProps }) {
     localStorage.removeItem('cart');
   }
 
+  const fetchUser = async (userid) => {
+    try {
+      let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getuser`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userid }),
+      });
+
+      let response = await res.json();
+      if (response.success) {
+        setUser(response.userDetails);
+      } else {
+        console.log('Error fetching user:', response.message);
+      }
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
+  };
+  const fetchUserAddress = async (userid) => {
+    try {
+      let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/useraddress`, {
+        method: "POST", // or 'PUT'
+        headers: { "Content-Type": "application/json", },
+        body: JSON.stringify({ userid }),
+      });
+      let response = await res.json();
+      if (response.success) {
+        console.log(response)
+        setAddress(response.address)
+      } else {
+        console.log('Error fetching address:', response.message);
+      }
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
+  };
+
   return (
     <>
       <LoadingBar color='#ff2d55' progress={progress} onLoaderFinished={() => setProgress(0)} />
-      {key && <Navbar user={user} key={key} logout={logout} cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />}
+      {key && <Navbar user={user} usertoken={usertoken} userid={userid} key={key} logout={logout} cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />}
       {/* <Navbar user={user} key={key} logout={logout} cart={cart} /> */}
-      <Component {...pageProps} cart={cart} clearCart={clearCart} buyNow={buyNow} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />
+      <Component {...pageProps} cart={cart} user={user} address={address} userid={userid} clearCart={clearCart} buyNow={buyNow} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />
       <Footer />
     </>
   );

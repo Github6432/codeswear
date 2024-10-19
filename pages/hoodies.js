@@ -11,6 +11,7 @@ const Hoodies = ({ products }) => {
           <h2 className='text-center text-pink-400  text-4xl pb-3'>Hoodies</h2>
         </div>
         <hr />
+        {Object.keys(products).length === 0 && <div className=" container text-center px-5 py-8 mx-auto">Hoddies is not available</div>}
         <div className="container px-5 py-8 mx-auto">
           <div className="grid md:grid-cols-4 gap-4 mx-20 md:mx-44">
             {

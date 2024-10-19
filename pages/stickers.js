@@ -11,6 +11,7 @@ const Stickers = ({ products }) => {
           <h2 className='text-center text-pink-400  text-4xl pb-3'>Stickers</h2>
         </div>
         <hr />
+        {Object.keys(products).length === 0 && <div className=" container text-center px-5 py-8 mx-auto">Stickers is not available</div>}
         <div className="container px-5 py-8 mx-auto">
           <div className="grid md:grid-cols-4 gap-4 mx-20 md:mx-44">
             {
@@ -22,7 +23,7 @@ const Stickers = ({ products }) => {
                     </Link>
                   </div>
                   <div className="mt-4">
-                      <h3 className="text-gray-500 text-xs tracking-widest title-font text-center mb-1">{products[item].category}</h3>
+                    <h3 className="text-gray-500 text-xs tracking-widest title-font text-center mb-1">{products[item].category}</h3>
                     <Link href={`/product/${products[item].slug}`} legacyBehavior>
                       <h2 className="text-gray-900 title-font text-lg text-center cursor-pointer font-medium">{products[item].title}</h2>
                     </Link>

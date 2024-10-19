@@ -27,7 +27,6 @@ const Orders = () => {
     const updataPaymentStatus = async () => {
         try {
             const orderId = localStorage.getItem('orderid');
-            console.log(orderId)
             const data = await fetch('/api/updatepaymentstatus', {
                 method: 'POST',
                 headers: {

@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import Order from "../models/Order";
 
 const MyOrder = ({ order }) => {
-  console.log(order)
   const router = useRouter();
   const [date, setDate] = useState(null);
   useEffect(() => {
