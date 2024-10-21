@@ -6,7 +6,7 @@ const handler = async (req, res) => {
         const { id, name, lastname, email, phone, city, state, country, pincode, landmark } = req.body;
         try {
             let address = await Address.findOneAndUpdate(
-                { _id:id },
+                { userid: id, useraddress: true },
                 { $set: { name, lastname, email, phone, city, state, country, pincode, landmark } }, { new: true }
             );
             if (!address) {

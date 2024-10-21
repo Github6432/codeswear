@@ -5,7 +5,7 @@ const handler = async (req, res) => {
     const {userid} = req.body;
   if (req.method === 'POST') {
     try {
-        let address = await Address.find({ userid }); // Find address based on the userId
+        let address = await Address.findById({ userid }); // Find address based on the userId
       if (!address) {
         return res.status(404).json({ success: false, message: 'No address found for this user' });
       }

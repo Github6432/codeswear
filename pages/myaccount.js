@@ -4,16 +4,16 @@ import React, { useEffect, useState } from 'react';
 const Myaccount = ({ user, address }) => {
     const router = useRouter();
 
-    const [name, setName] = useState(user.name);
-    const [lastname, setLastname] = useState(user.lastname);
-    const [email, setEmail] = useState(user.email);
-    const [phone, setPhone] = useState(user.phone);
-    const [userid, setUserid] = useState(user.id);
-    const [city, setCity] = useState(address.city);
-    const [state, setState] = useState(address.state);
-    const [country, setCountry] = useState(address.country);
-    const [pincode, setPincode] = useState(address.pincode);
-    const [landmark, setLandmark] = useState(address.landmark);
+    const [name, setName] = useState('');
+    const [lastname, setLastname] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [userid, setUserid] = useState('');
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
+    const [country, setCountry] = useState('');
+    const [pincode, setPincode] = useState('');
+    const [landmark, setLandmark] = useState('');
     const [showform, setShowform] = useState(true);
 
     const handleChange = (e) => {
@@ -44,20 +44,60 @@ const Myaccount = ({ user, address }) => {
             console.error('Fetch error:', error);
         }
     };
+    const updateprofile = async (id, name, lastname, email, phone, city, state, country, pincode, landmark) => {
+        try {
+            let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/updateprofile`, {
+                method: "POST", // or 'PUT'
+                headers: { "Content-Type": "application/json", },
+                body: JSON.stringify({ id, name, lastname, email, phone }),
+            });
+            let response = await res.json();
+            if (response.success) {
+                // console.log(response)
+                window.location.reload();
+            } else {
+                console.log('Error fetching address:', response.message);
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+        }
+    };
 
-    
+    const updateUserDatials = (id, name, lastname, email, phone, city, state, country, pincode, landmark) => {
+        updateUserAddress(id, name, lastname, email, phone, city, state, country, pincode, landmark);
+        updateprofile(id, name, lastname, email, phone);
+    }
+    const toggleForm = () => {
+        setShowform(!showform);
+    };
+    useEffect(() => {
+        if (user && address) {
+            setName(user.name);
+            setLastname(user.lastname);
+            setEmail(user.email);
+            setPhone(user.phone);
+            setUserid(user._id);
+            setCity(address.city);
+            setState(address.state);
+            setCountry(address.country);
+            setPincode(address.pincode);
+            setLandmark(address.landmark);
+        }
+    }, [user, address]);
+
+
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
             router.push('/login');
         }
-    }, [router]);
+    }, []);
 
     return (
         <>
             <div>
-                <h2 className='text-center my-4 text-pink-400  text-4xl'>Edit Profile</h2>
+                <h2 className='text-center my-4 text-pink-400  text-4xl uppercase'> Profile Details</h2>
             </div>
             {!showform && <div className='max-w-5xl my-10 p-6 mx-auto bg-white border shadow-xl rounded-lg overflow-hidden'>
                 <form className='px-4 md:px-48'>
@@ -101,8 +141,8 @@ const Myaccount = ({ user, address }) => {
                     </div>
                 </form >
                 {<div className=' flex justify-center px-4 md:px-48'>
-                    <button onClick={() => setShowform(!showform)} className="mx-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Back </button>
-                    <button onClick={() => updateUserAddress(selectedAddress._id, name, lastname, email, phone, city, state, country, pincode, landmark)} className="mx-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update </button>
+                    <button onClick={toggleForm} className="mx-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Back </button>
+                    <button onClick={() => updateUserDatials(userid, name, lastname, email, phone, city, state, country, pincode, landmark)} className="mx-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update </button>
                 </div>}
             </div >}
             {showform && <div className="max-w-lg my-10 mx-auto bg-white border shadow-xl rounded-lg overflow-hidden">

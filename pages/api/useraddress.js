@@ -2,10 +2,10 @@ import Address from "@/models/Address";
 import connectDb from "@/middleware/mongoose";
 
 const handler = async (req, res) => {
-    const {userid} = req.body;
+  const { userid } = req.body;
   if (req.method === 'POST') {
     try {
-        let address = await Address.findOne({ userid }); // Find address based on the userId
+      let address = await Address.findOne({ userid, useraddress: true }); // Find address based on the userId
       if (!address) {
         return res.status(404).json({ success: false, message: 'No User address found for this user' });
       }
