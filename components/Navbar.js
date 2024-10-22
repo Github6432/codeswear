@@ -10,7 +10,7 @@ const Navbar = ({ user, usertoken, cart, addToCart, removeFromCart, deleteCartIt
   const ref = useRef();
   const [dropdown, setDropdown] = useState(false);
   const [sidebar, setSidebar] = useState(false);
-
+  console.log(user)
 
 
   const toggleDropdown = () => {
@@ -30,6 +30,9 @@ const Navbar = ({ user, usertoken, cart, addToCart, removeFromCart, deleteCartIt
               className=" fixed right-2 md:top-12 top-16 my-2 px-5 py-1 w-32 text-base rounded-md text-pink-900 bg-pink-200"
             >
               <ul>
+                {(user.role == 'admin') && <Link href={'/admin/dashboard'} legacyBehavior>
+                  <a><li className='py-1 hover:text-red-500 '>Dashboard</li></a>
+                </Link>}
                 <Link href={'/myaccount'} legacyBehavior>
                   <a><li className='py-1 hover:text-red-500 '>My Account</li></a>
                 </Link>

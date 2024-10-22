@@ -54,8 +54,6 @@ export default function App({ Component, pageProps }) {
     }
   }, [userid]); // Only call fetchUser when userid is available
 
-
-
   //SAVE CART & SUB TOTAL
   const saveCart = (newCart) => {
     localStorage.setItem("cart", JSON.stringify(newCart));
@@ -146,7 +144,6 @@ export default function App({ Component, pageProps }) {
       });
       let response = await res.json();
       if (response.success) {
-        console.log(response)
         setAddress(response.address)
       } else {
         console.log('Error fetching address:', response.message);
