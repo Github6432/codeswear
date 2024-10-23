@@ -17,6 +17,7 @@ export default function App({ Component, pageProps }) {
   const [user, setUser] = useState({});
   const [address, setAddress] = useState({});
   const [userid, setUserid] = useState();
+  const [products, setProducts] = useState();
 
   //USEFFECT GET ITEM LOCAL STORAGE
   useEffect(() => {
@@ -46,11 +47,13 @@ export default function App({ Component, pageProps }) {
       setUsertoken({ value: token })
       setKey(Math.random());
     }
+    getallproducts()
   }, [router.query])
   useEffect(() => {
     if (userid) {
       fetchUser(userid);
       fetchUserAddress(userid)
+
     }
   }, [userid]); // Only call fetchUser when userid is available
 
@@ -152,13 +155,29 @@ export default function App({ Component, pageProps }) {
       console.error('Fetch error:', error);
     }
   };
+  const getallproducts = async () => {
+    try {
+      let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getallproducts`, {
+        method: "POST", // or 'PUT'
+        headers: { "Content-Type": "application/json", },
+      });
+      let response = await res.json();
+      if (response.success) {
+        setProducts(response.products)
+      } else {
+        console.log('Error fetching products:', response.message);
+      }
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
+  }
 
   return (
     <>
       <LoadingBar color='#ff2d55' progress={progress} onLoaderFinished={() => setProgress(0)} />
       {key && <Navbar user={user} usertoken={usertoken} userid={userid} key={key} logout={logout} cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />}
       {/* <Navbar user={user} key={key} logout={logout} cart={cart} /> */}
-      <Component {...pageProps} cart={cart} user={user} address={address} userid={userid} clearCart={clearCart} buyNow={buyNow} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />
+      <Component {...pageProps} cart={cart} products={products} user={user} address={address} userid={userid} clearCart={clearCart} buyNow={buyNow} addToCart={addToCart} removeFromCart={removeFromCart} deleteCartItem={deleteCartItem} subTotal={subTotal} />
       <Footer />
     </>
   );

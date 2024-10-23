@@ -10,7 +10,6 @@ const Navbar = ({ user, usertoken, cart, addToCart, removeFromCart, deleteCartIt
   const ref = useRef();
   const [dropdown, setDropdown] = useState(false);
   const [sidebar, setSidebar] = useState(false);
-  console.log(user)
 
 
   const toggleDropdown = () => {
